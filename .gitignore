@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+logs/
+mvp/data/*.db
+.env
+node_modules/
