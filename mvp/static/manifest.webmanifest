@@ -1,0 +1,13 @@
+{
+  "name": "Copiloto Rural",
+  "short_name": "Copiloto",
+  "description": "Asistente para maquinistas y tablero para contratistas rurales.",
+  "lang": "es-AR",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6f3ea",
+  "theme_color": "#2f5d34",
+  "icons": [
+    { "src": "/static/icono.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

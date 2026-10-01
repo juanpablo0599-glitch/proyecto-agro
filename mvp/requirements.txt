@@ -1,0 +1,4 @@
+# El MVP corre solo con la biblioteca estándar de Python (3.9+).
+# Esta dependencia es OPCIONAL: solo hace falta para usar IA real con ANTHROPIC_API_KEY.
+# Sin ella (o sin la key), el asistente funciona en modo mock con la base de conocimiento local.
+anthropic>=1.0,<2

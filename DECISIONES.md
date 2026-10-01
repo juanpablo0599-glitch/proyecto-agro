@@ -33,3 +33,16 @@ Formato: fecha/hora (UTC) — decisión — alternativas — por qué.
 - **Decisión:** usar el SDK oficial `anthropic` (declarado en `requirements.txt`) con el modelo `claude-opus-5-5`, esfuerzo `low` y fallback del lado del servidor por defecto. El modelo se puede cambiar con la variable de entorno `COPILOTO_MODELO`. Si no hay `ANTHROPIC_API_KEY` o no está instalado el SDK, el MVP usa el **modo mock** (base de conocimiento local).
 - **Alternativas:** llamar a la API por HTTP directo (sin SDK); modelo más barato por defecto.
 - **Por qué:** la guía oficial recomienda el SDK y el modelo por defecto; el costo por consulta (~USD 0,025) no cambia el negocio (ver sensibilidad). El mock asegura que el MVP corra sin credenciales, como exige la misión.
+
+## 2026-10-01 05:00 — Stack del MVP: Python estándar + SQLite + web sin frameworks
+- **Decisión:** servidor con `http.server` de la biblioteca estándar de Python, base SQLite, frontend HTML/CSS/JS sin dependencias, PWA con service worker para funcionar sin señal. Única dependencia opcional: `anthropic` (para IA real).
+- **Alternativas:** Flask/FastAPI + React; app nativa Android; bot de WhatsApp.
+- **Por qué:** (1) un solo comando sin instalar nada (`python3 app.py`), máxima reproducibilidad; (2) la página pesa poco (sin frameworks) para Android de gama baja; (3) el service worker permite usar checklists, calculadoras, guías y lecciones sin señal, y encolar lo cargado; (4) mantenible por una persona con perfil de datos (JP). WhatsApp queda para el T3 del roadmap (requiere cuenta de negocio, que la misión prohíbe crear); app nativa es caro para validar.
+
+## 2026-10-01 05:00 — Reglas de seguridad del asistente
+- **Decisión:** las preguntas urgentes (accidente, humo, incendio, intoxicación) nunca pasan por la IA: se responde un protocolo fijo y se escala. Las preguntas de productos/dosis se derivan al marbete y al ingeniero agrónomo. Si la IA falla, responde la base local.
+- **Por qué:** el costo de un error es alto (personas, máquinas, aplicaciones) y hay conflicto de interés si el asistente recomienda productos.
+
+## 2026-10-01 05:00 — Identificación sin contraseña en el MVP
+- **Decisión:** el operario elige su nombre; el tablero no pide clave.
+- **Por qué:** es una demo local con datos ficticios; documentado como límite. Antes del piloto real: PIN por operario y clave del tablero.
