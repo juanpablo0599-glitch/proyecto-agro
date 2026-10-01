@@ -19,12 +19,12 @@
   [CRA/INTA](https://www.cra.org.ar/nota/25226-por-cada-hectarea-de-soja-se-pierden-en-la-cosecha-1-4-quintales-us-1-300-millones-menos-para-la-economia/)
 - ✅ Siembra: una mala siembra de maíz puede costar **más de 1.400 kg/ha**; el INTA recomienda **5 a 8 km/h**.
   [INTA Informa](https://intainforma.inta.gob.ar/siembra-claves-para-calibrar-las-maquinas-y-reducir-las-perdidas/)
-- ✅ Pulverización: la deriva puede llevarse **30–50%** del producto si el equipo está mal calibrado.
+- ✅ (vía resumen del buscador; no confirmé la página exacta) Pulverización: la deriva puede llevarse **30–50%** del producto si el equipo está mal calibrado.
   [Manual INTA para agroaplicadores](https://repositorio.inta.gob.ar/bitstream/handle/20.500.12123/15895/INTA_CIA_InstitutodeIngenier%C3%ADaRural_Cid_R_Manual_agroaplicadores_uso_eficiente_fitosanitarios.pdf)
 - 🔶 Para un contratista que cosecha 5.000 ha de soja, el exceso sobre la tolerancia (~67 kg/ha) equivale a **~USD 100.000/año** de grano de sus clientes en el piso (con soja a ~USD 300/t, precio supuesto).
 
 ### Contexto del parque y de los salarios
-- ✅ CNA 2018: **22.802 cosechadoras**, **46% con más de 15 años**. Ventas 2025: >17.000 unidades (6.666 tractores, 1.723 sembradoras, 975 cosechadoras).
+- ✅ CNA 2018: **22.802 cosechadoras**, **46% con más de 15 años** (vía resumen del buscador, de notas que citan el CNA; verificar en los tabulados). Ventas 2025: >17.000 unidades (6.666 tractores, 1.723 sembradoras, 975 cosechadoras).
   [Agroclave/BCR](https://www.agroclave.com.ar/maquinaria-agricola/el-nuevo-mapa-la-maquinaria-agricola-n10253826.html)
 - ✅ Básico CCT (CNTA/UATRE) "conductor tractorista y maquinista": **$1.371.311/mes** desde el 1/10/2026 (agregador; verificar con la resolución oficial).
   [Contala](https://www.contala.com.ar/escalas/agrario)

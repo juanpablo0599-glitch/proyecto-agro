@@ -17,7 +17,7 @@
 - ✅ Miembros de FACMA: APMRC (Casilda), CE.CO.MA (San Vicente), A.T.C.P.C. (centro de Córdoba), ACMAER (Entre Ríos), CA.PRO.MA. (La Pampa), ACRTA (Tres Arroyos). Sede en Casilda. (Wikipedia, link arriba). El presidente en 2026 según La Capital es **Freddy Simone** (Wikipedia lista otro nombre, desactualizado).
 
 ### 1.2 Parque de maquinaria
-- ✅ **CNA 2018:** se relevaron **22.802 cosechadoras**; **46% con más de 15 años**, y ~70% con más de 10 años. (vía resumen de búsqueda; fuentes: https://www.lavozdelpueblo.com.ar/2021-08-02-tractores-y-cosechadoras-un-parque-camino-a-la-obsolescencia y https://www.todoagro.com.ar/evolucion-del-mercado-de-cosechadoras-en-argentina/)
+- ✅ (vía resumen del buscador) **CNA 2018:** se relevaron **22.802 cosechadoras**; **46% con más de 15 años**, y ~70% con más de 10 años. (vía resumen de búsqueda; fuentes: https://www.lavozdelpueblo.com.ar/2021-08-02-tractores-y-cosechadoras-un-parque-camino-a-la-obsolescencia y https://www.todoagro.com.ar/evolucion-del-mercado-de-cosechadoras-en-argentina/)
 - ✅ Parque de sembradoras **~85.000**, vida útil promedio 12 años (dato citado en búsqueda, fuente agregadora; ❓ no pude fechar con precisión).
 - ✅ Ventas 2025 (BCR vía Agroclave): **>17.000 unidades**, de las cuales 6.666 tractores, 1.723 sembradoras, 975 cosechadoras, 7.685 implementos. https://www.agroclave.com.ar/maquinaria-agricola/el-nuevo-mapa-la-maquinaria-agricola-n10253826.html
 - 🔶 Consecuencia: conviven máquinas viejas (mecánicas) con máquinas nuevas muy electrónicas (monitores, dosis variable, corte por sección, piloto automático). El operario tiene que saber de las dos. Esto refuerza el dolor de "cada día con las nuevas tecnologías se les dificulta más".
@@ -45,7 +45,7 @@
 - ✅ Literatura (Maizar/AIANBA): desuniformidad espacial ~7,4% y temporal ~6% de pérdida de rinde; stand desuniforme = 400–900 kg/ha. https://www.maizar.org.ar/vertext.php?id=181
 
 **Pulverización**
-- ✅ Pérdidas por deriva **30–50%** si el equipo no está bien calibrado (resumen de fuentes INTA/manuales técnicos; https://repositorio.inta.gob.ar/bitstream/handle/20.500.12123/15895/INTA_CIA_InstitutodeIngenier%C3%ADaRural_Cid_R_Manual_agroaplicadores_uso_eficiente_fitosanitarios.pdf). Además hay riesgo legal (deriva sobre zonas urbanas) y provincial (carnet de aplicador).
+- ✅ (vía resumen del buscador; no abrí la página exacta) Pérdidas por deriva **30–50%** si el equipo no está bien calibrado (resumen de fuentes INTA/manuales técnicos; https://repositorio.inta.gob.ar/bitstream/handle/20.500.12123/15895/INTA_CIA_InstitutodeIngenier%C3%ADaRural_Cid_R_Manual_agroaplicadores_uso_eficiente_fitosanitarios.pdf). Además hay riesgo legal (deriva sobre zonas urbanas) y provincial (carnet de aplicador).
 
 **Roturas**
 - ❓ No encontré estadísticas públicas de costo de roturas por mala operación. Es pregunta de entrevista (ej. "¿cuánto te costó la última rotura evitable?").

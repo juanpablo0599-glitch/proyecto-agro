@@ -2,7 +2,8 @@
 
 **Audiencia:** dueño/a de una empresa contratista grande, o la comisión directiva de una asociación de contratistas (ej. una de las cámaras de FACMA).
 **Duración:** 12–15 minutos + preguntas. **Quién presenta:** la socia (conoce el rubro), JP abre la demo en el celular.
-**Tono:** de igual a igual, con números del INTA, sin vender humo. Mostrar el celular, no slides llenas de texto.
+**Tono:** de igual a igual, con números del INTA, sin vender humo.
+**Antes de presentar:** verificar en la fuente original las dos cifras marcadas con (*) (ver `PREGUNTAS_ABIERTAS.md`, #14b). Mostrar el celular, no slides llenas de texto.
 
 ---
 
@@ -14,13 +15,13 @@ Subtítulo: un ayudante en el celular del maquinista y un tablero para vos.
 ### Slide 2 — El problema que ya conocen
 - "Necesitamos tractoristas y maquinistas formados" (presidente de FACMA).
 - Edad promedio del rubro: **48 años**. La rotación es "el costo oculto más alto" (Congreso Aapresid, 2026).
-- Cada año, máquinas más electrónicas… y parque mezclado: **casi la mitad de las cosechadoras tiene más de 15 años** (CNA 2018).
+- Cada año, máquinas más electrónicas… y parque mezclado: **casi la mitad de las cosechadoras tiene más de 15 años** (CNA 2018) (*).
 *Pregunta al público:* "¿Cuánto tarda hoy un operario nuevo en rendir como uno de ustedes?"
 
 ### Slide 3 — Cuánto cuesta
 - Pérdida promedio de cosecha en soja: **142 kg/ha**; la tolerancia del INTA es **75 kg/ha**.
 - Una mala siembra de maíz puede costar **más de 1.400 kg/ha** (INTA).
-- Una pulverizadora mal calibrada puede perder por deriva **30 a 50%** del producto.
+- Una pulverizadora mal calibrada puede perder por deriva **30 a 50%** del producto (*).
 - Y las roturas evitables: un motor recalentado, un incendio de cosechadora.
 *Qué decir:* "No es plata de ustedes solamente: es plata de sus clientes. Y el cliente se da cuenta."
 

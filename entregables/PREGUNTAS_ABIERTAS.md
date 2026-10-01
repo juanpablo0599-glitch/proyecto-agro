@@ -18,6 +18,7 @@ Fecha: 2026-10-01. Para cada una: por qué importa y cómo resolverla.
 | 11 | **Fecha de Agroactiva 2027** (suele ser en junio, en Armstrong) | Calendario comercial | Sitio de Agroactiva |
 | 12 | **¿Los operarios usan apps todos los días o solo WhatsApp?** | Formato del producto | Experimentos 1 y 2 |
 | 13 | **¿La IA de John Deere ("JD") va a ayudar al operario** en calibración y diagnóstico cuando llegue a Latinoamérica? | Amenaza competitiva | Seguir los anuncios; preguntarle a un concesionario |
+| 14b | **Deriva del 30–50% y 46% de cosechadoras con más de 15 años**: las tomé del resumen del buscador, no de la página original | Las uso en el pitch | Abrir el manual del INTA y los tabulados del CNA 2018 antes de presentar |
 | 14 | **Número de acopios y plantas actualizado** (el último dato es de 2017) | Tamaño del canal de cooperativas/acopios | RUCA / Secretaría de Agricultura |
 
 ## Regulación e Idea B
