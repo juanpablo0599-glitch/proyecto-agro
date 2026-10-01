@@ -99,6 +99,13 @@ class TestFlujoCompleto(unittest.TestCase):
         la_verde = next(m for m in t["maquinas"] if m["id"] == 2)
         self.assertEqual(la_verde["estado"], "parada")
         self.assertTrue(any("La Verde" in a["texto"] and a["nivel"] == "alta" for a in t["alertas"]))
+        self.assertIn("impacto", t)
+
+        # Constancia para el productor del lote 3, donde trabajó la cosechadora.
+        estado, c = self.pedir("/api/lotes/3/constancia")
+        self.assertEqual(estado, 200)
+        self.assertEqual(c["labores"][0]["checklist"], "no_apta")
+        self.assertEqual(self.pedir("/api/lotes/999/constancia")[0], 400)
 
     def test_04_sync_offline(self):
         ops = [{"tipo": "checklist", "datos": {"uid": "e2e-off", "operario_id": 3, "maquina_id": 6,

@@ -160,3 +160,9 @@ textarea { min-height: 96px; resize: vertical; }
 table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
 td, th { padding: 6px 4px; border-bottom: 1px solid var(--borde); text-align: left; }
 .oculto { display: none !important; }
+
+@media print {
+  .barra, .boton.primario, .senal { display: none !important; }
+  body { background: #fff; color: #000; font-size: 12pt; }
+  .tarjeta { box-shadow: none; break-inside: avoid; }
+}

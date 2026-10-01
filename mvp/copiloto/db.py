@@ -179,7 +179,10 @@ def cargar_datos_ejemplo(con):
         _insertar_checklist(con, operario, maquina, lote, fecha, tipo, items_ok(tipo, fallan))
 
     # Hoy: la sembradora salió bien; la Autopropulsada 2 NO salió (pérdida en mangueras).
+    # A las 7:05 si ya pasó esa hora; si se abre de madrugada, unos minutos antes (sin cambiar de día).
     hoy_7 = hoy.replace(hour=7, minute=5)
+    if hoy_7 > hoy:
+        hoy_7 = max(hoy.replace(hour=0, minute=0, second=0), hoy - timedelta(minutes=20))
     _insertar_checklist(con, 3, 5, 4, hoy_7, "sembradora", items_ok("sembradora", ("monitor",)),
                         "El monitor marca alarma en el cuerpo 9, el cuerpo tira bien.")
     _insertar_checklist(con, 4, 4, 2, hoy_7, "pulverizadora", items_ok("pulverizadora", ("mangueras",)),

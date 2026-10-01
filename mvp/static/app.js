@@ -120,6 +120,7 @@ async function cargarBase() {
 const operario = () => estado.empresa?.operarios.find((o) => o.id === estado.operarioId);
 const maquina = (id = estado.maquinaId) => estado.empresa?.maquinas.find((m) => m.id === id);
 const nombreTipo = (t) => estado.conocimiento?.tipos_maquina[t] || t;
+const nombreCultivo = (c) => ({ maiz: "maíz" }[c] || c || "");
 
 function opcionesMaquinas(seleccion, tipos) {
   return estado.empresa.maquinas
@@ -189,6 +190,7 @@ async function render() {
 $volver.addEventListener("click", () => {
   const actual = location.hash.replace(/^#\/?/, "").split("/")[0];
   if (actual === "tablero" || actual === "operario") ir("#/inicio");
+  else if (actual === "constancia") ir("#/tablero");
   else if (estado.operarioId) ir("#/operario");
   else ir("#/inicio");
 });
@@ -457,7 +459,7 @@ ruta("cal-perdidas", "Pérdidas de cosecha", () => {
     <label for="maq">Máquina</label>
     <select id="maq">${opcionesMaquinas(m && m.tipo === "cosechadora" ? m.id : null, ["cosechadora"])}</select>
     <label for="cult">Cultivo</label>
-    <select id="cult">${Object.keys(p1000).map((c) => `<option value="${c}">${c[0].toUpperCase() + c.slice(1)}</option>`).join("")}</select>
+    <select id="cult">${Object.keys(p1000).map((c) => `<option value="${c}">${nombreCultivo(c)[0].toUpperCase() + nombreCultivo(c).slice(1)}</option>`).join("")}</select>
     <div class="fila">
       <div><label for="gr">Granos en 1 m²</label><input id="gr" inputmode="numeric" value="60"></div>
       <div><label for="p1000">Peso de 1000 granos (g)</label><input id="p1000" inputmode="decimal" value="${p1000.soja}"></div>
@@ -627,6 +629,11 @@ ruta("tablero", "Tablero del equipo", async () => {
   catch { t = guardado.leer("tablero", null); }
   if (!t) { $vista.innerHTML = `<p class="aviso">Sin señal y sin datos guardados del tablero.</p>`; return; }
   const r = t.resumen;
+  // Las alertas menores (operarios sin checklist) se agrupan en una sola línea para no alargar el tablero.
+  const bajas = t.alertas.filter((a) => a.nivel === "baja");
+  const alertasVisibles = t.alertas.filter((a) => a.nivel !== "baja");
+  if (bajas.length) alertasVisibles.push({ nivel: "baja", texto: `${bajas.length} operario(s) sin checklist hoy`,
+    detalle: bajas.map((a) => a.texto.replace(" no hizo checklist hoy", "")).join(", ") });
   const txtEstado = { ok: "Lista", atencion: "Atención", parada: "Parada" };
   $vista.innerHTML = `
     <p class="suave">${esc(t.empresa.nombre)} · actualizado ${new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" })}${navigator.onLine ? "" : " (datos guardados, sin señal)"}</p>
@@ -636,8 +643,15 @@ ruta("tablero", "Tablero del equipo", async () => {
       <div class="tile"><div class="num" style="color:var(--peligro)">${r.maquinas_paradas}</div><div class="lbl">paradas</div></div>
       <div class="tile"><div class="num">${r.checklists_hoy}</div><div class="lbl">checklists hoy</div></div>
     </div>
+    ${t.impacto ? `<div class="tarjeta ok"><b>Últimos ${t.impacto.dias} días, el Copiloto ayudó a:</b>
+      <ul style="margin:6px 0 0;padding-left:1.2rem">
+        <li><b>${t.impacto.salidas_frenadas}</b> salida(s) frenadas por un punto crítico (${t.impacto.checklists} checklists hechos)</li>
+        <li><b>${t.impacto.calibraciones_fuera_de_rango}</b> calibración(es) fuera de rango detectadas (${t.impacto.calibraciones} hechas)</li>
+        ${t.impacto.perdida_promedio_kg_ha != null ? `<li>Pérdida de cosecha medida: <b>${t.impacto.perdida_promedio_kg_ha} kg/ha</b> promedio (${t.impacto.mediciones_perdidas} mediciones)</li>` : ""}
+        <li><b>${t.impacto.consultas}</b> consultas respondidas; ${t.impacto.pedidos_ayuda} pedidos de ayuda (${t.impacto.pedidos_resueltos} resueltos)</li>
+      </ul></div>` : ""}
     <h3>Alertas</h3>
-    <div class="tarjeta"><ul class="lista">${t.alertas.length ? t.alertas.map((a) => `
+    <div class="tarjeta"><ul class="lista">${alertasVisibles.length ? alertasVisibles.map((a) => `
       <li><span class="punto ${a.nivel}" aria-hidden="true"></span><div style="flex:1">
         <div><b>${esc(a.texto)}</b></div>${a.detalle ? `<div class="suave">${esc(a.detalle)}</div>` : ""}
         ${a.consulta_id ? `<button class="enlace" data-resolver="${a.consulta_id}">Marcar como resuelta</button>` : ""}
@@ -658,12 +672,37 @@ ruta("tablero", "Tablero del equipo", async () => {
     <div class="tarjeta"><ul class="lista">${t.consultas.map((q) => `
       <li><div style="flex:1"><div>${esc(q.pregunta)}</div>
         <div class="suave">${esc(q.operario)} · ${esc(q.fecha.slice(0, 16).replace("T", " "))} · ${q.escalada ? (q.resuelta ? "resuelta" : "<b>pidió ayuda</b>") : "respondida"} · modo ${esc(q.modo)}</div></div></li>`).join("") || "<li>Sin consultas.</li>"}</ul></div>
-    <button class="boton primario" id="refrescar">Actualizar</button>`;
+    <h3>Constancias para el productor</h3>
+    <p class="suave">Qué equipo entró a cada lote, con su checklist y calibraciones. Para mandarle al cliente.</p>
+    <div class="grilla">${(t.lotes || []).map((l) => `<button class="boton" data-ir="#/constancia/${l.id}"><span class="ico">📄</span><span>${esc(l.nombre)}<small>${esc(l.cliente)} · ${esc(l.localidad || "")}</small></span></button>`).join("")}</div>
+    <button class="boton primario" id="refrescar" style="margin-top:14px">Actualizar</button>`;
   document.getElementById("refrescar").addEventListener("click", render);
   $vista.querySelectorAll("[data-resolver]").forEach((b) => b.addEventListener("click", async () => {
     try { await api(`/api/consultas/${b.dataset.resolver}/resolver`, { method: "POST", body: {} }); render(); }
     catch (e) { b.textContent = "No se pudo (¿sin señal?)"; }
   }));
+});
+
+ruta("constancia", "Constancia de labor", async (id) => {
+  let c;
+  try { c = await api(`/api/lotes/${Number(id)}/constancia`); }
+  catch (e) { $vista.innerHTML = `<p class="aviso">${esc(e.message || "No se pudo cargar (¿sin señal?)")}</p>`; return; }
+  const txt = { apta: "✅ Apta", con_observaciones: "⚠️ Con observaciones", no_apta: "⛔ No apta (no salió)" };
+  $vista.innerHTML = `
+    <div class="tarjeta">
+      <p class="resultado">${esc(c.lote.nombre)}</p>
+      <p>Cliente: <b>${esc(c.lote.cliente)}</b> · ${esc(c.lote.localidad || "")} · ${c.lote.hectareas || "?"} ha · ${esc(nombreCultivo(c.lote.cultivo))}</p>
+      <p class="suave">Contratista: ${esc(c.contratista)} · Emitida ${esc(c.emitida.slice(0, 16).replace("T", " "))}</p>
+    </div>
+    ${c.labores.length ? c.labores.map((l) => `
+      <div class="tarjeta ${l.checklist === "apta" ? "ok" : l.checklist === "no_apta" ? "peligro" : "atencion"}">
+        <b>${esc(l.fecha.slice(0, 16).replace("T", " "))} · ${esc(l.maquina)} (${esc(nombreTipo(l.tipo))} ${esc(l.marca || "")})</b>
+        <div>Operario: ${esc(l.operario)} · Checklist: ${txt[l.checklist]}</div>
+        ${l.observaciones ? `<div class="suave">Observaciones: ${esc(l.observaciones)}</div>` : ""}
+        ${l.calibraciones.length ? `<div>Calibraciones del equipo (últimos 3 días): ${l.calibraciones.map((k) =>
+          `${k.aprobada ? "✅" : "❌"} ${esc(k.tipo)} (${esc(k.fecha.slice(0, 10))})`).join(" · ")}</div>` : '<div class="suave">Sin calibraciones registradas en los 3 días previos.</div>'}
+      </div>`).join("") : '<p class="aviso">Todavía no hay labores registradas en este lote.</p>'}
+    <button class="boton primario" onclick="window.print()">Imprimir o guardar como PDF</button>`;
 });
 
 // ---------------------------------------------------------------- arranque

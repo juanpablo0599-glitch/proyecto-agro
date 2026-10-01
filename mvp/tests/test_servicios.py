@@ -174,6 +174,21 @@ class TestTableroYSync(unittest.TestCase):
         self.assertIn("pastilla", textos)
         self.assertEqual(t["alertas"][0]["nivel"], "alta")  # ordenadas por gravedad
 
+    def test_impacto_semana(self):
+        imp = servicios.tablero(self.con)["impacto"]
+        self.assertGreaterEqual(imp["salidas_frenadas"], 1)
+        self.assertGreaterEqual(imp["calibraciones_fuera_de_rango"], 1)
+        self.assertGreaterEqual(imp["checklists"], 15)  # depende de la hora; al menos 6 días completos
+
+    def test_constancia_de_lote(self):
+        c = servicios.constancia_lote(self.con, 4)  # lote donde hoy trabajó la sembradora
+        self.assertEqual(c["lote"]["nombre"], "El Molino")
+        self.assertTrue(c["labores"])
+        self.assertEqual(c["labores"][0]["maquina"], "La Grande")
+        self.assertTrue(c["labores"][0]["calibraciones"])  # calibró la sembradora ayer
+        with self.assertRaises(servicios.ErrorDeDatos):
+            servicios.constancia_lote(self.con, 999)
+
     def test_sync_procesa_lote_offline_sin_duplicar_y_aisla_errores(self):
         with mock.patch.dict(os.environ, {"COPILOTO_MOCK": "1"}):
             lote = [

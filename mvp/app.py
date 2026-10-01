@@ -108,6 +108,8 @@ def crear_handler(app):
                         datos = servicios.datos_empresa(app.con, empresa_id)
                     elif p == "/api/tablero":
                         datos = servicios.tablero(app.con, empresa_id)
+                    elif p.startswith("/api/lotes/") and p.endswith("/constancia"):
+                        datos = servicios.constancia_lote(app.con, int(p.split("/")[3]))
                     elif p.startswith("/api/operarios/") and p.endswith("/progreso"):
                         datos = servicios.progreso_operario(app.con, int(p.split("/")[3]))
                     else:

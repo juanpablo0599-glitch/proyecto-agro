@@ -380,6 +380,7 @@ def tablero(con, empresa_id=1):
         "FROM consultas q JOIN operarios o ON o.id = q.operario_id WHERE o.empresa_id = ? "
         "ORDER BY q.fecha DESC LIMIT 10", (empresa_id,))]
     al = alertas(con, empresa_id)
+    impacto = impacto_semana(con, empresa_id)
     resumen = {
         "maquinas_ok": sum(1 for m in maquinas if m["estado"] == "ok"),
         "maquinas_atencion": sum(1 for m in maquinas if m["estado"] == "atencion"),
@@ -387,8 +388,66 @@ def tablero(con, empresa_id=1):
         "checklists_hoy": len(checklists_hoy),
         "alertas_altas": sum(1 for a in al if a["nivel"] == "alta"),
     }
-    return {"empresa": base["empresa"], "resumen": resumen, "maquinas": maquinas, "operarios": operarios,
-            "alertas": al, "checklists_hoy": checklists_hoy, "consultas": consultas}
+    return {"empresa": base["empresa"], "resumen": resumen, "impacto": impacto, "maquinas": maquinas,
+            "operarios": operarios, "alertas": al, "checklists_hoy": checklists_hoy, "consultas": consultas,
+            "lotes": base["lotes"]}
+
+
+def impacto_semana(con, empresa_id, dias=7):
+    """Lo que el sistema 'atajó' en los últimos días: es el argumento de valor para el dueño."""
+    desde = (datetime.now() - timedelta(days=dias)).isoformat()
+    filtro = "FROM checklists c JOIN maquinas m ON m.id = c.maquina_id WHERE m.empresa_id = ? AND c.fecha >= ?"
+    checklists = con.execute("SELECT COUNT(*) " + filtro, (empresa_id, desde)).fetchone()[0]
+    frenadas = con.execute("SELECT COUNT(*) " + filtro + " AND c.resultado = 'no_apta'", (empresa_id, desde)).fetchone()[0]
+    filtro_cal = ("FROM calibraciones c JOIN operarios o ON o.id = c.operario_id "
+                  "WHERE o.empresa_id = ? AND c.fecha >= ?")
+    calibraciones = con.execute("SELECT COUNT(*) " + filtro_cal, (empresa_id, desde)).fetchone()[0]
+    fuera = con.execute("SELECT COUNT(*) " + filtro_cal + " AND c.aprobada = 0", (empresa_id, desde)).fetchone()[0]
+    perdidas = [json.loads(r["resultado_json"])["kg_ha"] for r in con.execute(
+        "SELECT c.resultado_json " + filtro_cal + " AND c.tipo = 'perdidas'", (empresa_id, desde))]
+    ayuda = con.execute(
+        "SELECT COUNT(*), COALESCE(SUM(q.resuelta), 0) FROM consultas q JOIN operarios o ON o.id = q.operario_id "
+        "WHERE o.empresa_id = ? AND q.fecha >= ? AND q.escalada = 1", (empresa_id, desde)).fetchone()
+    consultas = con.execute(
+        "SELECT COUNT(*) FROM consultas q JOIN operarios o ON o.id = q.operario_id WHERE o.empresa_id = ? AND q.fecha >= ?",
+        (empresa_id, desde)).fetchone()[0]
+    return {
+        "dias": dias,
+        "checklists": checklists,
+        "salidas_frenadas": frenadas,
+        "calibraciones": calibraciones,
+        "calibraciones_fuera_de_rango": fuera,
+        "mediciones_perdidas": len(perdidas),
+        "perdida_promedio_kg_ha": round(sum(perdidas) / len(perdidas), 1) if perdidas else None,
+        "consultas": consultas,
+        "pedidos_ayuda": ayuda[0],
+        "pedidos_resueltos": ayuda[1],
+    }
+
+
+def constancia_lote(con, lote_id):
+    """Constancia para el productor: qué equipos entraron a su lote, con qué checklist y calibraciones."""
+    lote = _obtener(con, "lotes", lote_id)
+    if not lote:
+        raise ErrorDeDatos("Falta el lote")
+    labores = []
+    for c in con.execute(
+            "SELECT c.*, o.nombre AS operario, m.apodo, m.tipo, m.marca FROM checklists c "
+            "JOIN operarios o ON o.id = c.operario_id JOIN maquinas m ON m.id = c.maquina_id "
+            "WHERE c.lote_id = ? ORDER BY c.fecha DESC", (lote_id,)):
+        dia = c["fecha"][:10]
+        cals = [_calibracion(con, r["id"]) for r in con.execute(
+            "SELECT id FROM calibraciones WHERE maquina_id = ? AND substr(fecha, 1, 10) BETWEEN date(?, '-3 day') AND ?",
+            (c["maquina_id"], dia, dia))]
+        labores.append({
+            "fecha": c["fecha"], "operario": c["operario"], "maquina": c["apodo"], "tipo": c["tipo"],
+            "marca": c["marca"], "checklist": c["resultado"], "observaciones": c["observaciones"],
+            "calibraciones": [{"tipo": k["tipo"], "fecha": k["fecha"], "aprobada": k["aprobada"],
+                               "texto": k["resultado"].get("texto")} for k in cals],
+        })
+    empresa = con.execute("SELECT nombre FROM empresas WHERE id = ?", (lote["empresa_id"],)).fetchone()["nombre"]
+    return {"lote": dict(lote), "contratista": empresa, "labores": labores,
+            "emitida": datetime.now().replace(microsecond=0).isoformat()}
 
 
 # ---------------------------------------------------------------------------
