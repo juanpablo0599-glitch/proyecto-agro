@@ -62,7 +62,7 @@ Cierro Fase 3 con 2 vueltas.
 | Sombrero | Debilidad más grave | Corrección |
 |---|---|---|
 | Inversor | "El tablero muestra estados pero no muestra **valor**. ¿Qué le hace pagar al contratista?" | Agregué el bloque **"Últimos 7 días, el Copiloto ayudó a…"**: salidas frenadas por un punto crítico, calibraciones fuera de rango detectadas, pérdida de cosecha medida y pedidos de ayuda resueltos. |
-| Contratista (55 años, Android gama baja, mala señal) | "El tablero es eterno en el celular, y no quiero escribir." | Agrupé las alertas menores en una sola línea. Agregué la indicación de dictar con el micrófono del teclado. Medí el peso de la app: ~60 KB sin frameworks; funciona sin señal (probado en Chromium con la red cortada: checklist y consulta quedan en cola y se sincronizan al volver la señal). |
+| Contratista (55 años, Android gama baja, mala señal) | "El tablero es eterno en el celular, y no quiero escribir." | Agrupé las alertas menores en una sola línea. Agregué la indicación de dictar con el micrófono del teclado. Medí el peso de la app: ~53 KB sin comprimir y sin frameworks; funciona sin señal (probado en Chromium con la red cortada: checklist y consulta quedan en cola y se sincronizan al volver la señal). |
 | Gerente de acopio / productor | "¿Cómo sé que la máquina que entró a mi campo estaba bien?" | Agregué la **constancia de labor por lote** (checklist, operario, observaciones y calibraciones del equipo de los 3 días previos), imprimible o guardable como PDF. |
 
 ### Vuelta 2
