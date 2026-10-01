@@ -100,3 +100,13 @@
 
 ## 6. Conflicto de interés (socio en multinacional de insumos)
 - 🔶 **Alto.** Las multinacionales de insumos son obtentores/licenciantes de tecnologías en semillas y participan de ASA y de los esquemas de regalías (Sembrá Evolución, Bolsatech fue de Bayer). Un negocio que controla variedades y origen de semilla **toca directamente los intereses comerciales del empleador** y requeriría vender a clientes/competidores de su empleador (otras semilleras, acopios que distribuyen sus productos). Además, cualquier conocimiento interno sobre regalías/sistemas de control sería imposible de "olvidar". Sería muy difícil de compatibilizar con su trabajo.
+
+---
+
+## 7. Agregados tras la auto-revisión de Fase 1 (vuelta 1)
+
+### 7.1 Res. Conjunta 3/2026 — quién paga y qué hace el acopio (sombrero gerente de acopio)
+- ✅ Los establecimientos de primer punto de entrega (inscriptos en SISA) **"podrán suscribir acuerdos"** con entidades del comercio de granos u otros privados **para financiar y coordinar la entrega de muestras**; las Cámaras Arbitrales o privados con convenio INASE **adquieren y analizan** las muestras. Aplica **solo a cultivares inscriptos desde el 8/6/2026** (no retroactivo). (La Nación, 8/6/2026) https://www.lanacion.com.ar/economia/campo/el-gobierno-fijo-un-nuevo-protocolo-para-la-proteccion-intelectual-en-semillas-y-espera-una-suba-de-nid08062026/
+- ⚠️ **Bloqueo:** el texto completo en el Boletín Oficial (https://www.boletinoficial.gob.ar/detalleAviso/primera/342895/20260608) devolvió 503. Lo cito vía prensa y argentina.gob.ar.
+- 🔶 **Nicho posible para B:** "logística de muestras" (rotular, guardar 60 días, enviar al laboratorio, vincular con la CPE). Pero (a) el efecto es gradual (solo cultivares nuevos), (b) los que pagan son los obtentores, (c) los jugadores naturales son las Cámaras Arbitrales y Sembrá Evolución.
+- ✅ Decreto 205/2026 reestructuró el INASE (27/3/2026); no menciona delegación a privados en el texto principal. https://www.argentina.gob.ar/normativa/nacional/norma-424334/texto

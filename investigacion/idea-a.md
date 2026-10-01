@@ -125,3 +125,19 @@
 ## 6. Conflicto de interés (socio que trabaja en multinacional de insumos)
 - 🔶 Riesgo **bajo-medio**. El negocio no vende insumos ni depende de datos de la empresa. Los contratistas sí son clientes/aplicadores de productos de su empleador → **regla**: el asistente nunca recomienda marcas ni productos fitosanitarios (sólo calibración, dosis "según marbete", seguridad). No usar contactos/bases de la empresa para prospectar. Declarar la actividad a compliance del empleador antes de vender.
 - ⚠️ Si se vende a/through una multinacional (ej. programa de contratistas de una marca de insumos), el conflicto sube.
+
+---
+
+## 7. Agregados tras la auto-revisión de Fase 1 (vuelta 1)
+
+### 7.1 Conectividad en el campo (sombrero contratista)
+- ✅ 4G cubre >95% de la **población** (Movistar) y 88–90% (Personal/Claro), pero **la población no es el lote**. Conectividad en poblaciones rurales: **43,4%** vs 79% urbana; solo **~35%** de zonas rurales con banda ancha de calidad (INDEC, vía nota). https://www.innovaciondigital360.com/iot/conectividad-en-argentina-en-2025-entre-la-madurez-del-mercado-y-los-desafios-que-persisten/
+- ✅ Hay iniciativas puntuales de 4G en zona núcleo (500.000 ha). https://bichosdecampo.com/sin-senal-en-el-campo-ahora-hay-500-mil-hectareas-de-la-zona-nucleo-con-4g-aseguran-que-hasta-se-puede-ver-una-pelicula-en-netflix/
+- 🔶 **Implicancia de diseño:** el asistente tiene que funcionar **sin señal** para lo crítico (checklists, calculadoras de calibración, guías de diagnóstico) y usar la IA solo cuando hay señal. Las preguntas se encolan y se mandan cuando vuelve la conexión. Las apps del INTA ya funcionan offline: es el piso mínimo.
+
+### 7.2 Más competencia encontrada
+- ✅ **Auravant Contratistas**: órdenes de trabajo de siembra/aplicación, seguimiento en tiempo real compartido por WhatsApp, guía de mezclas, stock de insumos, **funciona offline**, plan vs. ejecutado. Tiene plan gratis (hasta 1.000 ha); precios de planes pagos no publicados. https://www.auravant.com/auravant-contratistas/ → compite con la "vista del dueño" (gestión), **no** con el asistente de calibración/diagnóstico ni con la certificación del operario.
+- ✅ **Drones pulverizadores:** ventas de 20 (2020) a ~2.000 (2025); se requiere certificación ANAC (Res. 550/2025) + licencia provincial de piloto aplicador; cursos de ~3 meses; pilotos pueden ganar hasta $5 M/mes (Infobae, 3/2/2026). https://www.infobae.com/economia/2026/02/03/uno-de-los-trabajos-tech-mas-demandados-del-agro-paga-sueldos-de-hasta-5-millones/ · https://www.argentina.gob.ar/anac/nuevo-marco-normativo-para-la-operacion-de-drones → nicho adyacente con certificación obligatoria **ya cubierta** por escuelas de drones; no lo priorizo para el MVP.
+
+### 7.3 Disposición a pagar — lo que sigue sin verificar
+- ❓ No hay precios públicos de software para contratistas en Argentina (Auravant, Plantium, FieldView no publican). La WTP **tiene que validarse en entrevistas** (ver PROXIMOS_PASOS). El pricing de la Fase 3 es una hipótesis.
