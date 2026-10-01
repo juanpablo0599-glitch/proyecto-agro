@@ -73,3 +73,19 @@ Cierro Fase 3 con 2 vueltas.
 | Gerente de acopio | "Los datos de hoy aparecían con hora futura." | Corregido en los datos de ejemplo. |
 
 Cierro la Fase 4 con 2 vueltas.
+
+## Fase 5 — Entregables y revisión final
+
+### Vuelta 1
+| Sombrero | Debilidad más grave | Corrección |
+|---|---|---|
+| Inversor | "Dos cifras del pitch (deriva 30–50%, 46% de cosechadoras con >15 años) las sacaste del resumen del buscador, no de la fuente. Si te las discuten, perdés credibilidad." | Las marqué como "vía resumen del buscador" en las notas y en la síntesis, con (*) en el pitch, y agregué la pregunta abierta #14b para verificarlas antes de presentar. |
+| Contratista | "El pitch dice 'piloto pago en 60–90 días' y después 'piloto gratis'. ¿En qué quedamos?" | Unifiqué: piloto gratis de 60 días, primeros pagos posibles a los 90 días. |
+| Gerente de acopio / cooperativa | "¿Dónde entro yo?" | Está en PROXIMOS_PASOS (preguntas para cooperativas con servicio de maquinaria) y en el modelo (licencia para cooperativas). |
+
+### Vuelta 2
+| Sombrero | Debilidad | Corrección |
+|---|---|---|
+| Inversor | "¿Se puede reproducir?" | Cloné la rama en limpio: tests en verde y el servidor arranca con `python3 app.py` sin instalar nada. |
+| Contratista | Sin objeciones nuevas. | — |
+| Gerente de acopio | Sin objeciones nuevas. | — |
