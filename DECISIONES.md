@@ -46,3 +46,8 @@ Formato: fecha/hora (UTC) — decisión — alternativas — por qué.
 ## 2026-10-01 05:00 — Identificación sin contraseña en el MVP
 - **Decisión:** el operario elige su nombre; el tablero no pide clave.
 - **Por qué:** es una demo local con datos ficticios; documentado como límite. Antes del piloto real: PIN por operario y clave del tablero.
+
+## 2026-10-01 — Demo navegable publicada como página privada (pedido de JP)
+- **Decisión:** JP, ya despierto, pidió ver la app porque no podía abrir `localhost` en la máquina de la nube. Publiqué una demo como página **privada** en claude.ai (solo la ve el dueño de la cuenta hasta que la comparta): https://claude.ai/artifact/UCnR1oToeKXnUuKYpeUynu
+- **Alternativas:** solo capturas (no se puede probar); deploy en un hosting (requiere cuenta y servicio externo).
+- **Por qué:** la regla nocturna de "no publicar" era para el trabajo sin supervisión; esto lo pidió el usuario y la página es privada. Para que corra sin servidor, armé `mvp/demo/backend_demo.js` (la lógica de servicios.py en JavaScript) y `mvp/demo/construir_demo.py`, que junta la app, ese backend y los mismos datos de ejemplo en un solo archivo. La navegación de `app.js` ahora guarda la ruta en memoria (en el marco embebido no siempre se puede tocar la URL); la app con servidor sigue funcionando igual (tests y prueba en navegador en verde).

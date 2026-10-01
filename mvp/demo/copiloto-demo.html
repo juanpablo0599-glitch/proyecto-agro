@@ -1,0 +1,1534 @@
+<title>Copiloto Rural</title>
+<style>
+/* Copiloto Rural — mobile-first, alto contraste para usar al sol, botones grandes. */
+:root {
+  --fondo: #f6f3ea;
+  --superficie: #ffffff;
+  --texto: #1d241c;
+  --texto-suave: #4d5a4b;
+  --primario: #2f5d34;
+  --primario-texto: #ffffff;
+  --borde: #d7d2c2;
+  --ok: #1e7b34;
+  --ok-fondo: #e3f3e6;
+  --atencion: #8a5a00;
+  --atencion-fondo: #fff1d1;
+  --peligro: #b3261e;
+  --peligro-fondo: #fde4e1;
+  --sombra: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --radio: 14px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fondo: #141813;
+    --superficie: #1e241d;
+    --texto: #eef2ec;
+    --texto-suave: #b4c0b1;
+    --primario: #6fae6f;
+    --primario-texto: #0e1a0e;
+    --borde: #354033;
+    --ok: #79d48b;
+    --ok-fondo: #1d3322;
+    --atencion: #f2c160;
+    --atencion-fondo: #3a2f17;
+    --peligro: #ff8a80;
+    --peligro-fondo: #3d1d1b;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --fondo: #141813; --superficie: #1e241d; --texto: #eef2ec; --texto-suave: #b4c0b1;
+  --primario: #6fae6f; --primario-texto: #0e1a0e; --borde: #354033;
+  --ok: #79d48b; --ok-fondo: #1d3322; --atencion: #f2c160; --atencion-fondo: #3a2f17;
+  --peligro: #ff8a80; --peligro-fondo: #3d1d1b; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--texto);
+  font: 18px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+.barra {
+  position: sticky; top: 0; z-index: 5;
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 16px; padding-top: max(10px, env(safe-area-inset-top));
+  background: var(--primario); color: var(--primario-texto);
+}
+.barra h1 { flex: 1; margin: 0; font-size: 1.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.volver {
+  min-width: 44px; min-height: 44px; border: 0; border-radius: 10px;
+  background: rgba(255, 255, 255, 0.18); color: inherit; font-size: 1.8rem; line-height: 1; cursor: pointer;
+}
+.senal { font-size: 0.8rem; padding: 4px 10px; border-radius: 99px; background: rgba(255, 255, 255, 0.2); white-space: nowrap; }
+.senal.sin { background: #ffcf70; color: #3b2a00; }
+
+main { max-width: 720px; margin: 0 auto; padding: 16px 16px 48px; outline: none; }
+h2 { font-size: 1.3rem; margin: 8px 0 12px; }
+h3 { font-size: 1.05rem; margin: 18px 0 8px; }
+p { margin: 6px 0 12px; }
+.suave { color: var(--texto-suave); font-size: 0.92rem; }
+
+/* Botones grandes */
+.grilla { display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media (min-width: 520px) { .grilla.dos { grid-template-columns: 1fr 1fr; } }
+.boton {
+  display: flex; align-items: center; gap: 14px; width: 100%;
+  min-height: 72px; padding: 14px 16px;
+  border: 2px solid var(--borde); border-radius: var(--radio);
+  background: var(--superficie); color: var(--texto); box-shadow: var(--sombra);
+  font: inherit; font-weight: 600; text-align: left; cursor: pointer; text-decoration: none;
+}
+.boton:active { transform: scale(0.99); }
+.boton .ico { font-size: 1.9rem; width: 40px; text-align: center; flex: none; }
+.boton small { display: block; font-weight: 400; color: var(--texto-suave); font-size: 0.85rem; }
+.boton.primario { background: var(--primario); color: var(--primario-texto); border-color: var(--primario); justify-content: center; text-align: center; }
+.boton.primario small { color: inherit; opacity: 0.85; }
+.boton:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 3px solid #f2a900; outline-offset: 2px;
+}
+.boton[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+/* Formularios */
+label { display: block; font-weight: 600; margin: 12px 0 6px; }
+select, input, textarea {
+  width: 100%; min-height: 52px; padding: 10px 12px;
+  border: 2px solid var(--borde); border-radius: 12px;
+  background: var(--superficie); color: var(--texto); font: inherit;
+}
+textarea { min-height: 96px; resize: vertical; }
+.fila { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mini-grilla { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.mini-grilla input { min-height: 48px; text-align: center; padding: 6px; }
+
+/* Checklist: dos botones grandes por ítem */
+.item {
+  background: var(--superficie); border: 2px solid var(--borde); border-radius: var(--radio);
+  padding: 12px; margin-bottom: 10px;
+}
+.item.bien { border-color: var(--ok); background: var(--ok-fondo); }
+.item.mal { border-color: var(--peligro); background: var(--peligro-fondo); }
+.item .texto { font-weight: 600; margin-bottom: 10px; }
+.item .critico { display: inline-block; font-size: 0.75rem; font-weight: 700; color: var(--peligro); margin-left: 6px; }
+.item .opciones { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.item .opciones button {
+  min-height: 56px; border-radius: 12px; border: 2px solid var(--borde);
+  background: var(--fondo); color: var(--texto); font: inherit; font-weight: 700; cursor: pointer;
+}
+.item .opciones button.activo.si { background: var(--ok); border-color: var(--ok); color: #fff; }
+.item .opciones button.activo.no { background: var(--peligro); border-color: var(--peligro); color: #fff; }
+
+/* Tarjetas y estados */
+.tarjeta {
+  background: var(--superficie); border: 2px solid var(--borde); border-radius: var(--radio);
+  padding: 14px 16px; margin-bottom: 12px; box-shadow: var(--sombra);
+}
+.tarjeta.ok, .chip.ok { border-color: var(--ok); background: var(--ok-fondo); }
+.tarjeta.atencion, .chip.atencion { border-color: var(--atencion); background: var(--atencion-fondo); }
+.tarjeta.peligro, .chip.peligro { border-color: var(--peligro); background: var(--peligro-fondo); }
+.resultado { font-size: 1.25rem; font-weight: 700; }
+.chip { display: inline-block; padding: 2px 10px; border-radius: 99px; border: 2px solid var(--borde); font-size: 0.8rem; font-weight: 700; }
+.pasos { padding-left: 1.3rem; }
+.pasos li { margin-bottom: 8px; }
+.respuesta { white-space: pre-wrap; }
+.burbuja { border-radius: var(--radio); padding: 12px 14px; margin: 10px 0; white-space: pre-wrap; }
+.burbuja.yo { background: var(--primario); color: var(--primario-texto); margin-left: 15%; }
+.burbuja.copiloto { background: var(--superficie); border: 2px solid var(--borde); margin-right: 5%; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 14px; }
+.chips button {
+  border: 2px solid var(--borde); border-radius: 99px; padding: 8px 14px; min-height: 44px;
+  background: var(--superficie); color: var(--texto); font: inherit; font-size: 0.9rem; cursor: pointer;
+}
+
+/* Tablero */
+.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
+@media (min-width: 560px) { .tiles { grid-template-columns: repeat(4, 1fr); } }
+.tile { background: var(--superficie); border: 2px solid var(--borde); border-radius: var(--radio); padding: 10px 12px; }
+.tile .num { font-size: 1.8rem; font-weight: 800; line-height: 1.1; }
+.tile .lbl { font-size: 0.85rem; color: var(--texto-suave); }
+.lista { list-style: none; padding: 0; margin: 0; }
+.lista li { display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--borde); }
+.lista li:last-child { border-bottom: 0; }
+.punto { width: 14px; height: 14px; border-radius: 50%; flex: none; margin-top: 6px; }
+.punto.ok { background: var(--ok); } .punto.atencion { background: var(--atencion); } .punto.parada, .punto.alta { background: var(--peligro); }
+.punto.media { background: var(--atencion); } .punto.baja { background: var(--texto-suave); }
+.barra-prog { height: 10px; border-radius: 99px; background: var(--borde); overflow: hidden; margin-top: 6px; }
+.barra-prog > span { display: block; height: 100%; background: var(--ok); }
+.enlace { background: none; border: 0; color: var(--primario); font: inherit; font-weight: 700; text-decoration: underline; cursor: pointer; padding: 6px 0; min-height: 44px; }
+.aviso { padding: 10px 12px; border-radius: 12px; background: var(--atencion-fondo); border: 2px solid var(--atencion); margin: 10px 0; font-size: 0.95rem; }
+table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+td, th { padding: 6px 4px; border-bottom: 1px solid var(--borde); text-align: left; }
+.oculto { display: none !important; }
+
+@media print {
+  .barra, .boton.primario, .senal { display: none !important; }
+  body { background: #fff; color: #000; font-size: 12pt; }
+  .tarjeta { box-shadow: none; break-inside: avoid; }
+}
+
+
+/* Ajustes de la versión demo: barra de prueba y encabezado dentro del marco de claude.ai */
+.barra { top: env(safe-area-inset-top, 0px); padding-top: 10px; }
+.demo {
+  background: var(--atencion-fondo); color: var(--texto);
+  border-bottom: 2px solid var(--atencion);
+  padding-block: 10px; padding-inline: 16px;
+  font-size: 0.92rem;
+}
+.demo-dentro { max-width: 720px; margin: 0 auto; display: grid; gap: 8px; }
+.demo-titulo { font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.78rem; color: var(--atencion); }
+.demo p { margin: 0; }
+.demo-botones { display: flex; flex-wrap: wrap; gap: 8px; }
+.demo-botones button {
+  min-height: 44px; padding: 8px 14px; border-radius: 10px;
+  border: 2px solid var(--atencion); background: var(--superficie); color: var(--texto);
+  font: inherit; font-weight: 700; cursor: pointer;
+}
+.demo-botones button[aria-pressed="true"] { background: var(--atencion); border-color: var(--atencion); color: var(--superficie); }
+.demo details summary { cursor: pointer; font-weight: 700; min-height: 32px; }
+.demo ol { margin: 6px 0 0; padding-left: 1.3rem; }
+.demo li { margin-bottom: 4px; }
+
+</style>
+
+<section class="demo" aria-label="Versión de prueba">
+  <div class="demo-dentro">
+    <div class="demo-titulo">Versión de prueba</div>
+    <p>Funciona en tu navegador con datos de ejemplo inventados. Lo que cargues queda solo en este dispositivo.</p>
+    <div class="demo-botones">
+      <button type="button" id="demo-senal" aria-pressed="false">Simular que no hay señal</button>
+      <button type="button" id="demo-reiniciar">Empezar de nuevo</button>
+    </div>
+    <details id="demo-recorrido">
+      <summary>Qué probar (5 minutos)</summary>
+      <ol>
+        <li><b>Soy maquinista</b> → Lucas Giménez → máquina <b>El Rojo</b>.</li>
+        <li><b>Checklist</b>: todo "Bien" menos "Protección de la toma de fuerza" → sale <b>NO SALE</b>.</li>
+        <li><b>Calibrar → Pulverizadora</b>: cargá 1.26, 1.25, 1.45 y 1.27 en la prueba de jarra.</li>
+        <li><b>Calibrar → Pérdidas de cosecha</b>: 84 granos de soja → arriba de la tolerancia del INTA.</li>
+        <li><b>Tengo un problema</b> → Sembradora → "Quedan dobles o fallas" → pedir ayuda.</li>
+        <li><b>Preguntar</b>: "el motor calienta mucho".</li>
+        <li>Tocá <b>Simular que no hay señal</b>, hacé otro checklist y mirá el aviso arriba. Volvé a tocar y se manda solo.</li>
+        <li>Volvé al inicio → <b>Soy dueño o encargado</b>: tablero, alertas y constancia por lote.</li>
+      </ol>
+    </details>
+  </div>
+</section>
+
+<header class="barra">
+  <button id="btn-volver" class="volver" aria-label="Volver" hidden>‹</button>
+  <h1 id="titulo">Copiloto Rural</h1>
+  <span id="senal" class="senal" role="status" aria-live="polite">…</span>
+</header>
+<main id="vista" tabindex="-1"></main>
+<script>window.COPILOTO_DEMO = true; window.COPILOTO_DATOS = {"generado": "2026-10-01T16:09:26", "conocimiento": {"tipos_maquina": {"tractor": "Tractor", "sembradora": "Sembradora", "pulverizadora": "Pulverizadora", "cosechadora": "Cosechadora"}, "checklists": {"tractor": [{"id": "aceite_motor", "texto": "Nivel de aceite de motor bien", "critico": true}, {"id": "refrigerante", "texto": "Nivel de agua/refrigerante bien", "critico": true}, {"id": "filtro_aire", "texto": "Filtro de aire limpio (sopleteado)", "critico": false}, {"id": "neumaticos", "texto": "Cubiertas sin cortes y con presión pareja", "critico": false}, {"id": "luces", "texto": "Luces y balizas andando (si va por ruta)", "critico": true}, {"id": "toma_fuerza", "texto": "Protección de la toma de fuerza puesta", "critico": true}, {"id": "perdidas", "texto": "Sin pérdidas de aceite ni gasoil debajo", "critico": false}, {"id": "matafuego", "texto": "Matafuego cargado a bordo", "critico": true}], "sembradora": [{"id": "dosificadores", "texto": "Placas/dosificadores correctos para la semilla", "critico": true}, {"id": "tubos", "texto": "Tubos de bajada limpios y sin roturas", "critico": true}, {"id": "cuchillas", "texto": "Cuchillas y discos abresurco sin desgaste grande", "critico": false}, {"id": "profundidad", "texto": "Profundidad regulada pareja en todos los cuerpos", "critico": true}, {"id": "ruedas_tapadoras", "texto": "Ruedas tapadoras y compactadoras giran bien", "critico": false}, {"id": "monitor", "texto": "Monitor de siembra prendido y sin alarmas", "critico": false}, {"id": "vacio", "texto": "Vacío/turbina sin pérdidas (si es neumática)", "critico": false}, {"id": "engrase", "texto": "Engrase hecho", "critico": false}], "pulverizadora": [{"id": "pastillas", "texto": "Pastillas limpias, todas del mismo tipo y tamaño", "critico": true}, {"id": "filtros", "texto": "Filtros (principal, de línea y de pastilla) limpios", "critico": true}, {"id": "mangueras", "texto": "Mangueras y conexiones sin pérdidas", "critico": true}, {"id": "manometro", "texto": "Manómetro funcionando", "critico": true}, {"id": "botalon", "texto": "Botalón parejo, sin golpes, altura regulada", "critico": false}, {"id": "antigoteo", "texto": "Antigoteo funcionando (no chorrea al cortar)", "critico": false}, {"id": "epp", "texto": "Elementos de protección personal a bordo", "critico": true}, {"id": "viento", "texto": "Revisé viento, temperatura y humedad antes de aplicar", "critico": true}, {"id": "agua_limpia", "texto": "Tanque de agua limpia para lavado de manos", "critico": false}], "cosechadora": [{"id": "aceite_motor", "texto": "Nivel de aceite de motor e hidráulico bien", "critico": true}, {"id": "radiador", "texto": "Radiador y panel rotativo limpios", "critico": true}, {"id": "matafuego", "texto": "Matafuegos cargados (riesgo de incendio)", "critico": true}, {"id": "correas", "texto": "Correas y cadenas con tensión correcta", "critico": false}, {"id": "cuchillas", "texto": "Cuchilla de corte y puntones sanos", "critico": false}, {"id": "zarandas", "texto": "Zarandas reguladas según cultivo", "critico": false}, {"id": "limpieza", "texto": "Máquina limpia de rastrojo acumulado", "critico": true}, {"id": "sensores", "texto": "Monitor y sensores de pérdida funcionando", "critico": false}]}, "guias": [{"id": "siembra_dobles_fallas", "maquina": "sembradora", "titulo": "Quedan dobles o fallas en la línea", "palabras": ["doble", "dobles", "falla", "fallas", "salteo", "salta", "distribucion", "desparejo", "plantas juntas", "huecos"], "pasos": ["Bajá la velocidad: el INTA recomienda sembrar entre 5 y 8 km/h según la máquina. Ir más rápido arruina la distribución.", "Revisá que la placa o el disco sea el correcto para el tamaño de esa semilla.", "En neumáticas: controlá el vacío en el manómetro y buscá pérdidas en mangueras y tapas.", "Mirá el enrasador/singularizador: si está muy abierto da dobles, muy cerrado da fallas.", "Revisá que el tubo de bajada no esté sucio, roto o con barro.", "Hacé la prueba: sembrá 50 metros, destapá y contá semillas en 10 metros de cada cuerpo."], "parar": "Si un cuerpo da muy distinto a los demás después de los ajustes, pará y avisá al encargado: cada metro mal sembrado se pierde toda la campaña."}, {"id": "siembra_profundidad", "maquina": "sembradora", "titulo": "La profundidad queda despareja", "palabras": ["profundidad", "profunda", "superficial", "muy arriba", "muy abajo", "tapado", "no tapa", "semilla arriba"], "pasos": ["Bajá la velocidad (5 a 8 km/h): a más velocidad el cuerpo rebota.", "Revisá la presión de los resortes o del sistema de carga de cada cuerpo; que sea pareja.", "Controlá las ruedas limitadoras de profundidad: que estén todas en la misma posición.", "Revisá el desgaste de discos y cuchillas: un disco gastado no abre bien el surco.", "Si hay mucho rastrojo, revisá la cuchilla turbo y los limpiadores de surco.", "Medí: destapá 10 semillas por cuerpo y medí la profundidad con una regla."], "parar": "Si no logra profundidad pareja en el lote, pará y avisá: la emergencia despareja puede costar mucho rendimiento (el INTA habla de más de 1.400 kg/ha en maíz con mala siembra)."}, {"id": "monitor_alarma", "maquina": "sembradora", "titulo": "El monitor de siembra marca alarma en un tubo", "palabras": ["monitor", "alarma", "sensor", "tubo", "pita", "suena", "luz roja"], "pasos": ["Pará y fijate si ese cuerpo está tirando semilla (tolva vacía, tubo tapado).", "Limpiá el sensor del tubo: el polvo y el curasemillas los ensucian y dan falsas alarmas.", "Revisá el cable y la ficha del sensor (golpes, humedad).", "Si la alarma sigue con el cuerpo funcionando bien, anotalo y avisá: puede ser el sensor."], "parar": "Nunca sigas sembrando con un cuerpo que no tira semilla."}, {"id": "pulv_caudal_desparejo", "maquina": "pulverizadora", "titulo": "Las pastillas tiran distinto (caudal desparejo)", "palabras": ["caudal", "pastilla", "pastillas", "pico", "picos", "tira distinto", "desparejo", "tapada", "tapado", "jarra"], "pasos": ["Hacé la prueba de jarra: juntá lo que tira cada pastilla durante 1 minuto a la presión de trabajo.", "Usá la calculadora de la app para saber cuánto tendría que tirar cada una.", "Limpiá con cepillo blando (nunca con alambre ni soplando con la boca) las que tiran de menos.", "Revisá los filtros de pastilla y de línea.", "Criterio usual: si una pastilla tira más de un 10% distinto de lo que tiene que tirar, se cambia.", "Cambiá todas juntas si están gastadas: una pastilla gastada tira de más."], "parar": "No apliques con pastillas tapadas o muy gastadas: quedan franjas sin control o con sobredosis."}, {"id": "pulv_deriva", "maquina": "pulverizadora", "titulo": "Riesgo de deriva (gota fina, viento)", "palabras": ["deriva", "viento", "gota", "gotas", "fina", "nube", "vuela", "temperatura", "humedad", "inversion"], "pasos": ["Medí viento, temperatura y humedad antes de arrancar y anotalo.", "No apliques con viento muy fuerte ni con calma total (puede haber inversión térmica).", "Bajá la presión: a más presión, gota más fina y más deriva.", "Usá la pastilla que indica el marbete del producto para el tamaño de gota (las de aire inducido hacen gota más grande).", "Bajá la altura del botalón a la recomendada para esa pastilla.", "Respetá las distancias a casas, escuelas, cursos de agua y lo que diga la ley de tu provincia."], "parar": "Si las condiciones no dan, NO se aplica. Es la decisión más barata. Avisá al encargado."}, {"id": "pulv_presion", "maquina": "pulverizadora", "titulo": "La presión sube y baja", "palabras": ["presion", "manometro", "sube", "baja", "oscila", "bomba", "regulador"], "pasos": ["Revisá el filtro principal: tapado hace oscilar la presión.", "Buscá aire en la succión: mangueras flojas o tanque casi vacío.", "Revisá el regulador de presión y el retorno.", "Controlá que el manómetro funcione (compará con uno nuevo).", "Mirá que la bomba gire a las vueltas indicadas."], "parar": "Si la presión no se estabiliza, no apliques: la dosis queda despareja."}, {"id": "pulv_espuma", "maquina": "pulverizadora", "titulo": "Se forma espuma o grumos en el tanque", "palabras": ["espuma", "grumo", "grumos", "mezcla", "corta", "precipita", "borra"], "pasos": ["Respetá el orden de carga que indica el marbete de cada producto.", "Cargá con agitación funcionando y el tanque con agua hasta la mitad por lo menos.", "Revisá la calidad del agua (agua dura o sucia trae problemas).", "Si tenés dudas de compatibilidad, hacé la prueba en un frasco antes."], "parar": "Si se corta la mezcla, no la apliques. Consultá al ingeniero agrónomo responsable de la receta."}, {"id": "cosecha_perdidas_cola", "maquina": "cosechadora", "titulo": "Se pierde grano por la cola", "palabras": ["cola", "zaranda", "zarandas", "ventilador", "sale grano", "tira grano", "perdida", "perdidas", "pierde"], "pasos": ["Medí primero: usá la calculadora de pérdidas de la app (aros en el suelo).", "Bajá la velocidad de avance: mucho material sobrecarga zarandas.", "Ajustá el ventilador: con mucho viento vuela grano, con poco se tapan las zarandas.", "Abrí un poco la zaranda superior si se ve grano limpio saliendo.", "Revisá que el retorno no esté sobrecargado."], "parar": "El INTA fija una tolerancia de 75 kg/ha de pérdida en soja. Si estás muy arriba y no bajás con los ajustes, avisá: es plata del productor que queda en el piso."}, {"id": "cosecha_perdidas_cabezal", "maquina": "cosechadora", "titulo": "Se pierde grano en el cabezal (plataforma)", "palabras": ["cabezal", "plataforma", "molinete", "desgrane", "vainas", "chaucha", "corte bajo", "puntones"], "pasos": ["Medí antes y después de la plataforma para saber dónde está la pérdida.", "Bajá la velocidad de avance.", "Ajustá el molinete: velocidad apenas mayor que la de avance, y la altura justa.", "Revisá la cuchilla y los puntones: una cuchilla en mal estado sacude la planta y desgrana.", "Cortá lo más bajo posible en soja para levantar las vainas de abajo."], "parar": "Si la pérdida de cabezal es alta en un cultivo seco, conviene cosechar en horas de más humedad. Consultalo con el encargado."}, {"id": "cosecha_grano_partido", "maquina": "cosechadora", "titulo": "El grano sale partido o con mucha basura", "palabras": ["partido", "partidos", "quebrado", "rotura de grano", "cilindro", "rotor", "concavo", "basura", "sucio", "tolva sucia"], "pasos": ["Si sale partido: bajá las vueltas del cilindro/rotor o abrí el cóncavo de a poco.", "Si sale con basura: ajustá zarandas y ventilador.", "Si queda grano en la vaina o espiga: lo contrario, más vueltas o cerrar cóncavo de a poco.", "Hacé un cambio por vez y revisá la tolva y la cola después de cada ajuste."], "parar": "Grano partido o sucio se castiga en el acopio. Si no lo podés corregir, avisá."}, {"id": "motor_temperatura", "maquina": "tractor", "titulo": "El motor calienta (temperatura alta)", "palabras": ["calienta", "temperatura", "recalienta", "agua", "radiador", "hierve", "termometro"], "pasos": ["Bajá la carga y dejá el motor en marcha lenta unos minutos (no lo apagues de golpe caliente).", "Con el motor frío: revisá el nivel de refrigerante. NUNCA abras la tapa del radiador en caliente.", "Limpiá el radiador y las rejillas: el rastrojo y la pelusa lo tapan.", "Revisá la correa del ventilador."], "parar": "Si la temperatura no baja, apagá y avisá. Un motor recalentado es una rotura muy cara."}, {"id": "incendio", "maquina": "cosechadora", "titulo": "Olor a quemado o principio de incendio", "palabras": ["fuego", "incendio", "humo", "quemado", "llama", "prende fuego"], "pasos": ["Pará la máquina, apagá el motor y bajate.", "Si es chico y es seguro, usá el matafuego apuntando a la base del fuego.", "Alejate y avisá de inmediato. Llamá a bomberos si no se controla.", "Prevención: limpiar todos los días el rastrojo acumulado en motor, escape y rodamientos."], "parar": "Tu vida vale más que la máquina. Si no se controla en segundos, alejate."}, {"id": "seguridad_toma_fuerza", "maquina": "tractor", "titulo": "Seguridad con la toma de fuerza y el enganche", "palabras": ["toma de fuerza", "cardan", "enganche", "seguridad", "atrapado", "accidente", "proteccion"], "pasos": ["Nunca pases por encima ni cerca del cardán girando.", "Desconectá la toma de fuerza y apagá el motor antes de destapar o desatorar algo.", "La protección del cardán tiene que estar puesta siempre.", "Enganchá con el tractor detenido y freno puesto; nadie entre el tractor y la herramienta mientras se mueve.", "Ropa ajustada, sin cosas colgando."], "parar": "Si falta una protección, la máquina no trabaja hasta reponerla."}], "modulos": [{"id": "m0_seguridad", "titulo": "Seguridad primero", "resumen": "Toma de fuerza, enganche, ruta, cansancio y elementos de protección.", "preguntas": [{"p": "Antes de desatorar algo en la herramienta, ¿qué hacés?", "opciones": ["Lo hago rápido con el motor en marcha", "Desconecto la toma de fuerza y apago el motor", "Le pido a otro que maneje mientras desatoro"], "correcta": 1}, {"p": "¿La protección del cardán se puede sacar para trabajar más cómodo?", "opciones": ["Sí, si tengo cuidado", "No, tiene que estar siempre puesta"], "correcta": 1}]}, {"id": "m1_tractor", "titulo": "El tractor y el mantenimiento diario", "resumen": "Chequeos antes de salir, fluidos, filtros, cubiertas y registro.", "preguntas": [{"p": "El motor calienta. ¿Cuándo abrís la tapa del radiador?", "opciones": ["En caliente, para ver rápido", "Nunca en caliente; espero que enfríe"], "correcta": 1}, {"p": "¿Qué ítem del checklist impide salir si falla?", "opciones": ["Filtro de aire sucio", "Matafuego sin carga", "Una cubierta con poco dibujo"], "correcta": 1}]}, {"id": "m2_sembradora", "titulo": "Sembradora", "resumen": "Densidad, distribución, profundidad y velocidad.", "preguntas": [{"p": "Según el INTA, ¿a qué velocidad conviene sembrar?", "opciones": ["Entre 5 y 8 km/h según la máquina", "Lo más rápido posible", "A 15 km/h siempre"], "correcta": 0}, {"p": "¿Cómo controlás la distribución en el lote?", "opciones": ["Mirando desde la cabina", "Destapando y contando semillas en 10 metros por cuerpo"], "correcta": 1}]}, {"id": "m3_pulverizadora", "titulo": "Pulverizadora", "resumen": "Pastillas, caudal, presión, velocidad, deriva y condiciones del tiempo.", "preguntas": [{"p": "Si subís mucho la presión, la gota...", "opciones": ["se hace más grande", "se hace más fina y deriva más"], "correcta": 1}, {"p": "¿Con qué limpiás una pastilla tapada?", "opciones": ["Con un alambre", "Soplando con la boca", "Con un cepillo blando"], "correcta": 2}, {"p": "Hay mucho viento hacia unas casas. ¿Qué hacés?", "opciones": ["Aplico igual pero rápido", "No aplico y aviso al encargado"], "correcta": 1}]}, {"id": "m4_cosechadora", "titulo": "Cosechadora", "resumen": "Regulación, pérdidas y método de los aros del INTA.", "preguntas": [{"p": "¿Cuál es la tolerancia de pérdida de cosecha en soja según el INTA?", "opciones": ["75 kg/ha", "300 kg/ha", "No hay tolerancia"], "correcta": 0}, {"p": "Sale grano partido. ¿Qué probás primero?", "opciones": ["Subir las vueltas del cilindro", "Bajar las vueltas o abrir el cóncavo de a poco"], "correcta": 1}]}, {"id": "m5_precision", "titulo": "Electrónica y agricultura de precisión", "resumen": "Monitores, guía, corte por secciones y qué hacer cuando fallan.", "preguntas": [{"p": "El monitor marca alarma en un tubo pero el cuerpo tira bien. ¿Qué hacés?", "opciones": ["Lo ignoro para siempre", "Limpio el sensor, reviso la ficha, lo anoto y aviso"], "correcta": 1}]}, {"id": "m6_cliente", "titulo": "Trabajo con el cliente", "resumen": "Registro de la labor, cuidado del campo ajeno, reportar incidentes.", "preguntas": [{"p": "Rompiste un alambrado del cliente. ¿Qué hacés?", "opciones": ["No digo nada", "Lo registro y aviso al encargado y al cliente"], "correcta": 1}]}], "tolerancia_perdida_kg_ha": {"soja": 75}, "p1000_tipico_g": {"soja": 170, "maiz": 300, "trigo": 38, "girasol": 60}}, "asistente": {"urgentes": ["accidente", "herido", "lastimado", "sangre", "atrapado", "incendio", "fuego", "humo", "intoxicado", "intoxicacion", "mareado", "vuelco", "volco", "volcó"], "escalar": ["rotura", "rompio", "roto", "ruido raro", "golpe", "no arranca", "pierde aceite", "pierde liquido", "pierde gasoil", "pierde agua", "chorrea"], "producto": ["que producto", "qué producto", "que marca", "qué marca", "que herbicida", "qué herbicida", "que insecticida", "qué insecticida", "que fungicida", "qué fungicida", "dosis de", "cuanto producto", "cuánto producto", "que le echo", "qué le echo"]}, "tablas": {"empresas": [{"id": 1, "nombre": "Servicios Agrícolas Los Aromos (ejemplo)", "localidad": "Casilda", "provincia": "Santa Fe"}], "operarios": [{"id": 1, "empresa_id": 1, "nombre": "Raúl Benítez", "rol": "Maquinista de cosechadora", "telefono": "3464-000001", "ingreso": "2009-03-01"}, {"id": 2, "empresa_id": 1, "nombre": "Matías Ferreyra", "rol": "Operario de pulverizadora", "telefono": "3464-000002", "ingreso": "2024-08-15"}, {"id": 3, "empresa_id": 1, "nombre": "Lucas Giménez", "rol": "Tractorista / sembradora", "telefono": "3464-000003", "ingreso": "2026-07-01"}, {"id": 4, "empresa_id": 1, "nombre": "Brenda Sosa", "rol": "Operaria de pulverizadora", "telefono": "3464-000004", "ingreso": "2025-02-10"}, {"id": 5, "empresa_id": 1, "nombre": "Walter Quiroga", "rol": "Encargado de equipo", "telefono": "3464-000005", "ingreso": "2003-11-20"}], "maquinas": [{"id": 1, "empresa_id": 1, "tipo": "cosechadora", "apodo": "La Colorada", "marca": "Case IH", "modelo": "Axial", "anio": 2012, "horas": 6480.0, "service_cada_horas": 250.0, "ultimo_service_horas": 6300.0}, {"id": 2, "empresa_id": 1, "tipo": "cosechadora", "apodo": "La Verde", "marca": "John Deere", "modelo": "Convencional", "anio": 2008, "horas": 9120.0, "service_cada_horas": 250.0, "ultimo_service_horas": 8850.0}, {"id": 3, "empresa_id": 1, "tipo": "pulverizadora", "apodo": "Autopropulsada 1", "marca": "Pla", "modelo": "Autopropulsada 28 m", "anio": 2019, "horas": 3150.0, "service_cada_horas": 250.0, "ultimo_service_horas": 3000.0}, {"id": 4, "empresa_id": 1, "tipo": "pulverizadora", "apodo": "Autopropulsada 2", "marca": "Metalfor", "modelo": "Autopropulsada 27 m", "anio": 2022, "horas": 1640.0, "service_cada_horas": 250.0, "ultimo_service_horas": 1600.0}, {"id": 5, "empresa_id": 1, "tipo": "sembradora", "apodo": "La Grande", "marca": "Crucianelli", "modelo": "Neumática 16 surcos", "anio": 2016, "horas": 2210.0, "service_cada_horas": 200.0, "ultimo_service_horas": 2100.0}, {"id": 6, "empresa_id": 1, "tipo": "tractor", "apodo": "El Rojo", "marca": "Massey Ferguson", "modelo": "180 HP", "anio": 2014, "horas": 7850.0, "service_cada_horas": 250.0, "ultimo_service_horas": 7700.0}], "lotes": [{"id": 1, "empresa_id": 1, "cliente": "Establecimiento Don Ernesto (ejemplo)", "nombre": "Lote 4 - Bajo", "localidad": "Casilda", "hectareas": 120.0, "cultivo": "maiz"}, {"id": 2, "empresa_id": 1, "cliente": "Establecimiento Don Ernesto (ejemplo)", "nombre": "Lote 7 - La Loma", "localidad": "Casilda", "hectareas": 85.0, "cultivo": "soja"}, {"id": 3, "empresa_id": 1, "cliente": "Agropecuaria Las Tunas (ejemplo)", "nombre": "Potrero Norte", "localidad": "Chabás", "hectareas": 210.0, "cultivo": "soja"}, {"id": 4, "empresa_id": 1, "cliente": "Familia Peralta (ejemplo)", "nombre": "El Molino", "localidad": "Arteaga", "hectareas": 64.0, "cultivo": "maiz"}, {"id": 5, "empresa_id": 1, "cliente": "Agropecuaria Las Tunas (ejemplo)", "nombre": "Lote 12", "localidad": "Chabás", "hectareas": 150.0, "cultivo": "trigo"}], "checklists": [{"id": 1, "uid": "6ad59a91-f063-4960-aa52-1578cd2a1e9f", "operario_id": 3, "maquina_id": 5, "lote_id": 1, "fecha": "2026-09-21T07:10:26", "resultado": "apta", "observaciones": null, "origen": "online", "items": {"dosificadores": true, "tubos": true, "cuchillas": true, "profundidad": true, "ruedas_tapadoras": true, "monitor": true, "vacio": true, "engrase": true}}, {"id": 2, "uid": "11bc29fd-987b-4f1c-98cc-43990fa8f7b2", "operario_id": 2, "maquina_id": 3, "lote_id": 3, "fecha": "2026-09-21T07:10:26", "resultado": "apta", "observaciones": null, "origen": "online", "items": {"pastillas": true, "filtros": true, "mangueras": true, "manometro": true, "botalon": true, "antigoteo": true, "epp": true, "viento": true, "agua_limpia": true}}, {"id": 3, "uid": "7edf5f56-befd-4620-9569-0593bdb67890", "operario_id": 4, "maquina_id": 4, "lote_id": 2, "fecha": "2026-09-21T07:10:26", "resultado": "con_observaciones", "observaciones": null, "origen": "online", "items": {"pastillas": true, "filtros": true, "mangueras": true, "manometro": true, "botalon": true, "antigoteo": true, "epp": true, "viento": true, "agua_limpia": false}}, {"id": 4, "uid": "a41d35f1-e030-4e28-950a-aeddaf411e85", "operario_id": 3, "maquina_id": 5, "lote_id": 1, "fecha": "2026-09-22T07:10:26", "resultado": "apta", "observaciones": null, "origen": "online", "items": {"dosificadores": true, "tubos": true, "cuchillas": true, "profundidad": true, "ruedas_tapadoras": true, "monitor": true, "vacio": true, "engrase": true}}, {"id": 5, "uid": "e1d528cb-a891-40c7-82c3-27c6ac13ed84", "operario_id": 2, "maquina_id": 3, "lote_id": 3, "fecha": "2026-09-22T07:10:26", "resultado": "apta", "observaciones": null, "origen": "online", "items": {"pastillas": true, "filtros": true, "mangueras": true, "manometro": true, "botalon": true, "antigoteo": true, "epp": true, "viento": true, "agua_limpia": true}}, {"id": 6, "uid": "e343d9e8-005d-489d-9612-e786a9fa2615", "operario_id": 3, "maquina_id": 5, "lote_id": 1, "fecha": "2026-09-23T07:10:26", "resultado": "apta", "observaciones": null, "origen": "online", "items": {"dosificadores": true, "tubos": true, "cuchillas": true, "profundidad": true, "ruedas_tapadoras": true, "monitor": true, "vacio": true, "engrase": true}}, {"id": 7, "uid": "f5523b48-ebbd-420d-9370-271f0a29074e", "operario_id": 2, "maquina_id": 3, "lote_id": 3, "fecha": "2026-09-23T07:10:26", "resultado": "apta", "observaciones": null, "origen": "online", "items": {"pastillas": true, "filtros": true, "mangueras": true, "manometro": true, "botalon": true, "antigoteo": true, "epp": true, "viento": true, "agua_limpia": true}}, {"id": 8, "uid": "f3bfaa81-6016-498e-9bd0-37019abc1b6a", "operario_id": 4, "maquina_id": 4, "lote_id": 2, "fecha": "2026-09-23T07:10:26", "resultado": "con_observaciones", "observaciones": null, "origen": "online", "items": {"pastillas": true, "filtros": true, "mangueras": true, "manometro": true, "botalon": true, "antigoteo": true, "epp": true, "viento": true, "agua_limpia": false}}, {"id": 9, "uid": "a6576483-4a51-4177-a896-01270378a1c0", "operario_id": 3, "maquina_id": 5, "lote_id": 1, "fecha": "2026-09-24T07:10:26", "resultado": "apta", "observaciones": null, "origen": "online", "items": {"dosificadores": true, "tubos": true, "cuchillas": true, "profundidad": true, "ruedas_tapadoras": true, "monitor": true, "vacio": true, "engrase": true}}, {"id": 10, "uid": "5ad63562-5549-41fb-94ca-faf3b217700d", "operario_id": 2, "maquina_id": 3, "lote_id": 3, "fecha": "2026-09-24T07:10:26", "resultado": "apta", "observaciones": null, "origen": "online", "items": {"pastillas": true, "filtros": true, "mangueras": true, "manometro": true, "botalon": true, "antigoteo": true, "epp": true, "viento": true, "agua_limpia": true}}, {"id": 11, "uid": "bde5868e-9965-4b14-8c8f-e370ab4e8fdd", "operario_id": 3, "maquina_id": 5, "lote_id": 1, "fecha": "2026-09-25T07:10:26", "resultado": "apta", "observaciones": null, "origen": "online", "items": {"dosificadores": true, "tubos": true, "cuchillas": true, "profundidad": true, "ruedas_tapadoras": true, "monitor": true, "vacio": true, "engrase": true}}, {"id": 12, "uid": "d26f7a73-c62f-442e-9874-f8192c73078a", "operario_id": 2, "maquina_id": 3, "lote_id": 3, "fecha": "2026-09-25T07:10:26", "resultado": "apta", "observaciones": null, "origen": "online", "items": {"pastillas": true, "filtros": true, "mangueras": true, "manometro": true, "botalon": true, "antigoteo": true, "epp": true, "viento": true, "agua_limpia": true}}, {"id": 13, "uid": "6cab004c-c277-4863-9ba7-08fcc52b367c", "operario_id": 4, "maquina_id": 4, "lote_id": 2, "fecha": "2026-09-25T07:10:26", "resultado": "con_observaciones", "observaciones": null, "origen": "online", "items": {"pastillas": true, "filtros": true, "mangueras": true, "manometro": true, "botalon": true, "antigoteo": true, "epp": true, "viento": true, "agua_limpia": false}}, {"id": 14, "uid": "ae5e0dee-a2c9-446d-8c98-4311d6a31ef1", "operario_id": 3, "maquina_id": 5, "lote_id": 1, "fecha": "2026-09-26T07:10:26", "resultado": "apta", "observaciones": null, "origen": "online", "items": {"dosificadores": true, "tubos": true, "cuchillas": true, "profundidad": true, "ruedas_tapadoras": true, "monitor": true, "vacio": true, "engrase": true}}, {"id": 15, "uid": "0e9b622d-bba6-4265-aad9-d4ede812bb80", "operario_id": 2, "maquina_id": 3, "lote_id": 3, "fecha": "2026-09-26T07:10:26", "resultado": "apta", "observaciones": null, "origen": "online", "items": {"pastillas": true, "filtros": true, "mangueras": true, "manometro": true, "botalon": true, "antigoteo": true, "epp": true, "viento": true, "agua_limpia": true}}, {"id": 16, "uid": "ac50d1b4-fea4-4362-b0f3-9d68897de237", "operario_id": 3, "maquina_id": 5, "lote_id": 1, "fecha": "2026-09-27T07:10:26", "resultado": "apta", "observaciones": null, "origen": "online", "items": {"dosificadores": true, "tubos": true, "cuchillas": true, "profundidad": true, "ruedas_tapadoras": true, "monitor": true, "vacio": true, "engrase": true}}, {"id": 17, "uid": "e877a839-10ff-48a3-b598-9ebcd7149442", "operario_id": 2, "maquina_id": 3, "lote_id": 3, "fecha": "2026-09-27T07:10:26", "resultado": "apta", "observaciones": null, "origen": "online", "items": {"pastillas": true, "filtros": true, "mangueras": true, "manometro": true, "botalon": true, "antigoteo": true, "epp": true, "viento": true, "agua_limpia": true}}, {"id": 18, "uid": "1db92412-8b21-4fe3-be50-cf6381228f81", "operario_id": 4, "maquina_id": 4, "lote_id": 2, "fecha": "2026-09-27T07:10:26", "resultado": "con_observaciones", "observaciones": null, "origen": "online", "items": {"pastillas": true, "filtros": true, "mangueras": true, "manometro": true, "botalon": true, "antigoteo": true, "epp": true, "viento": true, "agua_limpia": false}}, {"id": 19, "uid": "7734d039-aa92-431c-a3f7-4894b6cb0fc2", "operario_id": 3, "maquina_id": 5, "lote_id": 1, "fecha": "2026-09-28T07:10:26", "resultado": "apta", "observaciones": null, "origen": "online", "items": {"dosificadores": true, "tubos": true, "cuchillas": true, "profundidad": true, "ruedas_tapadoras": true, "monitor": true, "vacio": true, "engrase": true}}, {"id": 20, "uid": "6c5d045e-3eab-4b5c-8473-9189f7ecbdf4", "operario_id": 2, "maquina_id": 3, "lote_id": 3, "fecha": "2026-09-28T07:10:26", "resultado": "apta", "observaciones": null, "origen": "online", "items": {"pastillas": true, "filtros": true, "mangueras": true, "manometro": true, "botalon": true, "antigoteo": true, "epp": true, "viento": true, "agua_limpia": true}}, {"id": 21, "uid": "f4342c8d-a2ba-446a-a98e-71f14c182ccf", "operario_id": 3, "maquina_id": 5, "lote_id": 1, "fecha": "2026-09-29T07:10:26", "resultado": "apta", "observaciones": null, "origen": "online", "items": {"dosificadores": true, "tubos": true, "cuchillas": true, "profundidad": true, "ruedas_tapadoras": true, "monitor": true, "vacio": true, "engrase": true}}, {"id": 22, "uid": "2acfdc7b-d63e-47d6-862e-3afdcf17566f", "operario_id": 2, "maquina_id": 3, "lote_id": 3, "fecha": "2026-09-29T07:10:26", "resultado": "apta", "observaciones": null, "origen": "online", "items": {"pastillas": true, "filtros": true, "mangueras": true, "manometro": true, "botalon": true, "antigoteo": true, "epp": true, "viento": true, "agua_limpia": true}}, {"id": 23, "uid": "e755f730-2980-4651-8c01-a85fdd086ccf", "operario_id": 4, "maquina_id": 4, "lote_id": 2, "fecha": "2026-09-29T07:10:26", "resultado": "con_observaciones", "observaciones": null, "origen": "online", "items": {"pastillas": true, "filtros": true, "mangueras": true, "manometro": true, "botalon": true, "antigoteo": true, "epp": true, "viento": true, "agua_limpia": false}}, {"id": 24, "uid": "42b1e1ca-d710-4ce6-bfb5-1370e9ddc5a5", "operario_id": 3, "maquina_id": 5, "lote_id": 1, "fecha": "2026-09-30T07:10:26", "resultado": "apta", "observaciones": null, "origen": "online", "items": {"dosificadores": true, "tubos": true, "cuchillas": true, "profundidad": true, "ruedas_tapadoras": true, "monitor": true, "vacio": true, "engrase": true}}, {"id": 25, "uid": "0649db8c-569d-4f7a-8173-8996298fa6ed", "operario_id": 2, "maquina_id": 3, "lote_id": 3, "fecha": "2026-09-30T07:10:26", "resultado": "apta", "observaciones": null, "origen": "online", "items": {"pastillas": true, "filtros": true, "mangueras": true, "manometro": true, "botalon": true, "antigoteo": true, "epp": true, "viento": true, "agua_limpia": true}}, {"id": 26, "uid": "1dc76229-d851-4da8-97b6-2b0c507ec26f", "operario_id": 3, "maquina_id": 5, "lote_id": 4, "fecha": "2026-10-01T07:05:26", "resultado": "con_observaciones", "observaciones": "El monitor marca alarma en el cuerpo 9, el cuerpo tira bien.", "origen": "online", "items": {"dosificadores": true, "tubos": true, "cuchillas": true, "profundidad": true, "ruedas_tapadoras": true, "monitor": false, "vacio": true, "engrase": true}}, {"id": 27, "uid": "c8b6c23e-8b1a-451d-834d-de235213e27b", "operario_id": 4, "maquina_id": 4, "lote_id": 2, "fecha": "2026-10-01T07:05:26", "resultado": "no_apta", "observaciones": "Pierde por la conexión del botalón derecho.", "origen": "online", "items": {"pastillas": true, "filtros": true, "mangueras": false, "manometro": true, "botalon": true, "antigoteo": true, "epp": true, "viento": true, "agua_limpia": true}}], "calibraciones": [{"id": 1, "uid": "b24afdbc-483f-4e49-80e9-ab7af4d77e45", "operario_id": 2, "maquina_id": 3, "tipo": "pulverizadora", "aprobada": 0, "fecha": "2026-09-29T16:09:26", "entradas": {"volumen_l_ha": 80, "velocidad_km_h": 18, "distancia_picos_cm": 52.5, "medidos_l_min": [1.27, 1.25, 1.24, 1.41, 1.26, 1.1, 1.25, 1.27]}, "resultado": {"detalle": [{"pastilla": 1, "medido_l_min": 1.27, "desvio_pct": 0.8, "ok": true}, {"pastilla": 2, "medido_l_min": 1.25, "desvio_pct": -0.8, "ok": true}, {"pastilla": 3, "medido_l_min": 1.24, "desvio_pct": -1.6, "ok": true}, {"pastilla": 4, "medido_l_min": 1.41, "desvio_pct": 11.9, "ok": false}, {"pastilla": 5, "medido_l_min": 1.26, "desvio_pct": 0.0, "ok": true}, {"pastilla": 6, "medido_l_min": 1.1, "desvio_pct": -12.7, "ok": false}, {"pastilla": 7, "medido_l_min": 1.25, "desvio_pct": -0.8, "ok": true}, {"pastilla": 8, "medido_l_min": 1.27, "desvio_pct": 0.8, "ok": true}], "a_revisar": [4, 6], "promedio_l_min": 1.256, "desvio_promedio_pct": -0.3, "aprobada": false, "texto": "Revisá o cambiá 2 pastilla(s): 4, 6. Se aceptan hasta ±10%."}}, {"id": 2, "uid": "1b332cb2-b8fd-4108-b97c-0625aa5270e9", "operario_id": 3, "maquina_id": 5, "tipo": "siembra", "aprobada": 1, "fecha": "2026-09-30T16:09:26", "entradas": {"plantas_ha": 80000, "distancia_surcos_cm": 52.5, "pg": 95, "eficiencia": 90, "contadas_10m": [49, 50, 47, 51, 49]}, "resultado": {"plantas_por_metro": 4.2, "semillas_por_metro": 4.91, "semillas_en_10_metros": 49.1, "texto": "Todos los cuerpos dentro de lo esperado.", "detalle": [{"cuerpo": 1, "contadas": 49.0, "desvio_pct": -0.2, "ok": true}, {"cuerpo": 2, "contadas": 50.0, "desvio_pct": 1.8, "ok": true}, {"cuerpo": 3, "contadas": 47.0, "desvio_pct": -4.3, "ok": true}, {"cuerpo": 4, "contadas": 51.0, "desvio_pct": 3.9, "ok": true}, {"cuerpo": 5, "contadas": 49.0, "desvio_pct": -0.2, "ok": true}], "a_revisar": [], "aprobada": true, "objetivo_en_10m": 49.1}}], "consultas": [{"id": 1, "uid": "e533567c-d5e0-4dd0-9238-b9c250692ec4", "operario_id": 3, "maquina_id": 5, "pregunta": "¿A qué velocidad tengo que ir con la sembradora en este lote?", "respuesta": "El INTA recomienda entre 5 y 8 km/h según la máquina...", "modo": "mock", "guia_id": "siembra_dobles_fallas", "escalada": 0, "resuelta": 1, "fecha": "2026-09-30T10:09:26"}, {"id": 2, "uid": "b86d1e19-5485-4c8f-9c6e-9aab660875a4", "operario_id": 2, "maquina_id": 3, "pregunta": "Tengo una pastilla que tira mucho más que las otras", "respuesta": "Hacé la prueba de jarra...", "modo": "mock", "guia_id": "pulv_caudal_desparejo", "escalada": 0, "resuelta": 1, "fecha": "2026-09-30T20:09:26"}, {"id": 3, "uid": "cbdcc04d-5b2e-4e7d-8c64-11ef05496e0b", "operario_id": 4, "maquina_id": 4, "pregunta": "Pierde líquido por la conexión del botalón y no sé si cambiar la manguera o la abrazadera", "respuesta": "No apliques con pérdidas. Avisé al encargado para que lo revise.", "modo": "mock", "guia_id": null, "escalada": 1, "resuelta": 0, "fecha": "2026-10-01T06:09:26"}], "progreso": [{"operario_id": 1, "modulo_id": "m0_seguridad", "puntaje": 100, "aprobado": 1, "fecha": "2026-09-26T16:09:26"}, {"operario_id": 1, "modulo_id": "m1_tractor", "puntaje": 100, "aprobado": 1, "fecha": "2026-09-26T16:09:26"}, {"operario_id": 1, "modulo_id": "m4_cosechadora", "puntaje": 100, "aprobado": 1, "fecha": "2026-09-26T16:09:26"}, {"operario_id": 1, "modulo_id": "m5_precision", "puntaje": 100, "aprobado": 1, "fecha": "2026-09-26T16:09:26"}, {"operario_id": 2, "modulo_id": "m0_seguridad", "puntaje": 100, "aprobado": 1, "fecha": "2026-09-26T16:09:26"}, {"operario_id": 2, "modulo_id": "m3_pulverizadora", "puntaje": 67, "aprobado": 0, "fecha": "2026-09-26T16:09:26"}, {"operario_id": 3, "modulo_id": "m0_seguridad", "puntaje": 100, "aprobado": 1, "fecha": "2026-09-26T16:09:26"}, {"operario_id": 3, "modulo_id": "m1_tractor", "puntaje": 50, "aprobado": 0, "fecha": "2026-09-26T16:09:26"}, {"operario_id": 4, "modulo_id": "m0_seguridad", "puntaje": 100, "aprobado": 1, "fecha": "2026-09-26T16:09:26"}, {"operario_id": 4, "modulo_id": "m3_pulverizadora", "puntaje": 100, "aprobado": 1, "fecha": "2026-09-26T16:09:26"}, {"operario_id": 4, "modulo_id": "m6_cliente", "puntaje": 100, "aprobado": 1, "fecha": "2026-09-26T16:09:26"}]}};</script>
+<script>
+/* Copiloto Rural — backend de demostración que corre en el navegador.
+   Reemplaza al servidor Python (app.py + copiloto/servicios.py) para poder mostrar la app
+   en una página estática. Intercepta los fetch a /api/... y responde con la misma lógica:
+   checklists, calibraciones, asistente en modo mock, progreso, alertas, tablero, constancia y sync.
+   Los datos de ejemplo salen del mismo db.py (los genera construir_demo.py) y viven en este navegador.
+   Si se cambia servicios.py, hay que reflejar el cambio acá. */
+"use strict";
+
+(function () {
+  const D = window.COPILOTO_DATOS;
+  const KB = D.conocimiento;
+  const CLAVE = "copiloto.demo.base.v1";
+  const demo = { sinSenal: false, base: null };
+  window.CopilotoDemo = demo;
+
+  // ------------------------------------------------------------- fechas (hora local, sin zona)
+  const pad = (n) => String(n).padStart(2, "0");
+  const iso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  const ahora = () => iso(new Date());
+  const hoy = () => ahora().slice(0, 10);
+  const haceDias = (n) => { const d = new Date(); d.setDate(d.getDate() - n); return iso(d); };
+
+  class ErrorDeDatos extends Error {}
+
+  // ------------------------------------------------------------- base en memoria (+ copia en el navegador)
+  function sembrar() {
+    const t = JSON.parse(JSON.stringify(D.tablas));
+    // Corre los datos de ejemplo días enteros para que "hoy" sea hoy, sin pasar de la hora actual.
+    const generado = new Date(D.generado.slice(0, 10) + "T00:00:00");
+    const base = new Date(hoy() + "T00:00:00");
+    const dias = Math.round((base - generado) / 86400000);
+    const limite = new Date(Date.now() - 5 * 60000);
+    for (const tabla of ["checklists", "calibraciones", "consultas", "progreso"]) {
+      for (const r of t[tabla]) {
+        const d = new Date(r.fecha);
+        d.setDate(d.getDate() + dias);
+        r.fecha = iso(d > limite ? limite : d);
+      }
+    }
+    return { dia: hoy(), tablas: t };
+  }
+
+  function cargar() {
+    try {
+      const guardada = JSON.parse(localStorage.getItem(CLAVE) || "null");
+      if (guardada && guardada.dia === hoy()) return guardada;
+    } catch { /* sin almacenamiento: queda en memoria */ }
+    return sembrar();
+  }
+
+  function guardar() {
+    try { localStorage.setItem(CLAVE, JSON.stringify(demo.base)); } catch { /* sin almacenamiento */ }
+  }
+
+  demo.reiniciar = function () {
+    demo.base = sembrar();
+    guardar();
+    try {
+      for (const k of Object.keys(localStorage)) if (k.startsWith("copiloto.") && k !== CLAVE) localStorage.removeItem(k);
+    } catch { /* nada */ }
+  };
+
+  demo.base = cargar();
+  const T = () => demo.base.tablas;
+  const proximoId = (filas) => filas.reduce((m, f) => Math.max(m, f.id || 0), 0) + 1;
+  const uid = (datos) => String(datos.uid || (crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-" + Math.random()));
+
+  function obtener(tabla, id, nombre) {
+    if (id === null || id === undefined || id === "") return null;
+    const f = T()[tabla].find((r) => r.id === Number(id));
+    if (!f) throw new ErrorDeDatos(`No existe ${nombre} ${id}`);
+    return f;
+  }
+
+  function fecha(valor) {
+    if (!valor) return ahora();
+    const d = new Date(String(valor).replace("Z", ""));
+    if (isNaN(d)) throw new ErrorDeDatos("Fecha inválida");
+    return iso(d);
+  }
+
+  // ------------------------------------------------------------- cálculos (copiloto/calculos.py)
+  function positivo(nombre, valor) {
+    const v = parseFloat(valor);
+    if (valor === null || valor === undefined || valor === "" || isNaN(v)) throw new ErrorDeDatos(`Falta el dato: ${nombre}`);
+    if (v <= 0) throw new ErrorDeDatos(`El dato '${nombre}' tiene que ser mayor que cero`);
+    return v;
+  }
+  const r1 = (x) => Math.round(x * 10) / 10;
+  const r2 = (x) => Math.round(x * 100) / 100;
+  const r3 = (x) => Math.round(x * 1000) / 1000;
+
+  const calc = {
+    caudal(v, vel, d) {
+      const q = positivo("volumen (L/ha)", v) * positivo("velocidad (km/h)", vel) * positivo("distancia entre picos (cm)", d) / 60000;
+      return { caudal_l_min: r3(q), texto: `Cada pastilla tiene que tirar ${q.toFixed(2)} litros por minuto.` };
+    },
+    pastillas(obj, medidos, tol = 10) {
+      obj = positivo("caudal objetivo (L/min)", obj);
+      if (!medidos || !medidos.length) throw new ErrorDeDatos("Cargá al menos una pastilla medida");
+      const detalle = medidos.map((m, i) => {
+        const med = positivo(`pastilla ${i + 1}`, m);
+        const desvio = (med - obj) / obj * 100;
+        return { pastilla: i + 1, medido_l_min: r3(med), desvio_pct: r1(desvio), ok: Math.abs(desvio) <= tol };
+      });
+      const malas = detalle.filter((d) => !d.ok).map((d) => d.pastilla);
+      const prom = detalle.reduce((s, d) => s + d.medido_l_min, 0) / detalle.length;
+      return {
+        detalle, a_revisar: malas, promedio_l_min: r3(prom), desvio_promedio_pct: r1((prom - obj) / obj * 100), aprobada: !malas.length,
+        texto: malas.length ? `Revisá o cambiá ${malas.length} pastilla(s): ${malas.join(", ")}. Se aceptan hasta ±${tol}%.` : `Todas las pastillas dentro de ±${tol}%. Bien.`,
+      };
+    },
+    semillas(pl, dist, pg = 90, ef = 90) {
+      pl = positivo("plantas por hectárea", pl);
+      const d = positivo("distancia entre surcos (cm)", dist) / 100;
+      pg = positivo("poder germinativo (%)", pg) / 100;
+      ef = positivo("eficiencia de implantación (%)", ef) / 100;
+      if (pg > 1 || ef > 1) throw new ErrorDeDatos("Los porcentajes no pueden pasar de 100");
+      const pm = pl * d / 10000;
+      const sm = pm / (pg * ef);
+      return { plantas_por_metro: r2(pm), semillas_por_metro: r2(sm), semillas_en_10_metros: r1(sm * 10),
+        texto: `Tirá ${sm.toFixed(1)} semillas por metro (contá ${Math.round(sm * 10)} en 10 metros).` };
+    },
+    siembra(contadas, objMetro, tol = 5) {
+      const obj = positivo("semillas objetivo por metro", objMetro) * 10;
+      if (!contadas || !contadas.length) throw new ErrorDeDatos("Cargá al menos un cuerpo contado");
+      const detalle = contadas.map((c, i) => {
+        const v = parseFloat(c);
+        if (isNaN(v)) throw new ErrorDeDatos(`Falta el dato del cuerpo ${i + 1}`);
+        if (v < 0) throw new ErrorDeDatos(`El cuerpo ${i + 1} no puede ser negativo`);
+        const desvio = (v - obj) / obj * 100;
+        return { cuerpo: i + 1, contadas: v, desvio_pct: r1(desvio), ok: Math.abs(desvio) <= tol };
+      });
+      const malos = detalle.filter((d) => !d.ok).map((d) => d.cuerpo);
+      return { detalle, a_revisar: malos, aprobada: !malos.length, objetivo_en_10m: r1(obj),
+        texto: malos.length ? `Revisá los cuerpos: ${malos.join(", ")} (se aceptan hasta ±${tol}%).` : "Todos los cuerpos dentro de lo esperado." };
+    },
+    perdidas(granos, p1000, cultivo = "soja") {
+      const g = parseFloat(granos);
+      if (isNaN(g)) throw new ErrorDeDatos("Falta el dato: granos por m²");
+      if (g < 0) throw new ErrorDeDatos("Los granos no pueden ser negativos");
+      const kg = g * positivo("peso de mil granos (g)", p1000) / 100;
+      const tol = KB.tolerancia_perdida_kg_ha[cultivo];
+      let veredicto, texto;
+      if (tol === undefined) {
+        veredicto = "sin_tolerancia";
+        texto = `Estás perdiendo ${Math.round(kg)} kg/ha. No tengo cargada una tolerancia verificada para ${cultivo}: consultala con el técnico.`;
+      } else if (kg <= tol) {
+        veredicto = "ok"; texto = `Pérdida de ${Math.round(kg)} kg/ha: dentro de la tolerancia (${tol} kg/ha). Bien.`;
+      } else {
+        veredicto = "alta"; texto = `Pérdida de ${Math.round(kg)} kg/ha: arriba de la tolerancia (${tol} kg/ha). Revisá la regulación (te sobran ${Math.round(kg - tol)} kg/ha).`;
+      }
+      return { kg_ha: r1(kg), tolerancia_kg_ha: tol ?? null, veredicto, texto };
+    },
+  };
+
+  // ------------------------------------------------------------- asistente mock (copiloto/asistente.py)
+  const norm = (t) => (t || "").toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "");
+  const contiene = (t, palabras) => palabras.some((p) => t.includes(norm(p)));
+
+  function buscarGuia(pregunta, tipo) {
+    const t = norm(pregunta);
+    let mejor = null, puntajeMejor = 0;
+    for (const g of KB.guias) {
+      let p = 0;
+      for (const palabra of g.palabras) if (t.includes(norm(palabra))) p += palabra.includes(" ") ? 2 : 1;
+      if (!p) continue;
+      if (tipo && g.maquina === tipo) p += 1.5;
+      if (p > puntajeMejor) { mejor = g; puntajeMejor = p; }
+    }
+    return mejor;
+  }
+  const formatearGuia = (g) => `${g.titulo}\n\n${g.pasos.map((p, i) => `${i + 1}. ${p}`).join("\n")}\n\nCuándo parar: ${g.parar}`;
+
+  function responder(pregunta, tipo) {
+    const t = norm(pregunta);
+    const urgente = contiene(t, D.asistente.urgentes);
+    const escalar = contiene(t, D.asistente.escalar);
+    const producto = contiene(t, D.asistente.producto);
+    const guia = buscarGuia(pregunta, tipo);
+    if (urgente) {
+      let texto = "PRIMERO LA SEGURIDAD.\n1. Pará la máquina y apagá el motor.\n2. Alejate si hay fuego, humo o riesgo de vuelco.\n" +
+        "3. Si hay alguien herido, llamá al 107 (emergencias médicas) o al 911.\n4. Avisá al encargado ahora. Ya le dejé tu consulta marcada como URGENTE.";
+      if (guia) texto += "\n\n" + formatearGuia(guia);
+      return { respuesta: texto, guia_id: guia ? guia.id : null, escalar: true };
+    }
+    if (producto) {
+      return { respuesta: "De productos y dosis no te puedo recomendar nada: eso lo define la receta del ingeniero agrónomo y el marbete del producto. " +
+        "Sí te puedo ayudar a calibrar la máquina para que tire exactamente el volumen que pide la receta. Probá con el botón 'Calibrar'.", guia_id: null, escalar: false };
+    }
+    if (guia) return { respuesta: formatearGuia(guia), guia_id: guia.id, escalar };
+    const maquina = (KB.tipos_maquina[tipo] || "la máquina").toLowerCase();
+    return { respuesta: `No tengo una guía para eso todavía. Contame un poco más: ¿qué hace ${maquina}, desde cuándo y qué estabas haciendo? Mientras tanto:\n` +
+      "1. Si hay ruido raro, olor a quemado o pérdida, pará y revisá con el motor apagado.\n2. Fijate en el manual de tu máquina.\n3. Le pasé tu consulta al encargado para que te llame.",
+      guia_id: null, escalar: true };
+  }
+
+  // ------------------------------------------------------------- servicios (copiloto/servicios.py)
+  function evaluarChecklist(tipo, items) {
+    if (!KB.checklists[tipo]) throw new ErrorDeDatos(`Tipo de máquina desconocido: ${tipo}`);
+    let critico = false, otro = false;
+    for (const i of KB.checklists[tipo]) {
+      if (!items[i.id]) { if (i.critico) critico = true; else otro = true; }
+    }
+    return critico ? "no_apta" : otro ? "con_observaciones" : "apta";
+  }
+
+  function vistaChecklist(c) {
+    const tipo = obtener("maquinas", c.maquina_id, "máquina").tipo;
+    return {
+      ...c,
+      fallados: KB.checklists[tipo].filter((i) => !c.items[i.id]).map((i) => ({ id: i.id, texto: i.texto, critico: i.critico })),
+      mensaje: {
+        apta: "Máquina lista para salir. ¡Buen trabajo!",
+        con_observaciones: "Puede salir, pero hay cosas para revisar. Quedan anotadas para el encargado.",
+        no_apta: "NO SALE. Hay un punto crítico que resolver antes. Ya le avisamos al encargado.",
+      }[c.resultado],
+    };
+  }
+
+  function registrarChecklist(datos, origen = "online") {
+    const u = uid(datos);
+    const previo = T().checklists.find((c) => c.uid === u);
+    if (previo) return { ...vistaChecklist(previo), duplicado: true };
+    const op = obtener("operarios", datos.operario_id, "operario");
+    const maq = obtener("maquinas", datos.maquina_id, "máquina");
+    if (!op || !maq) throw new ErrorDeDatos("Faltan operario o máquina");
+    obtener("lotes", datos.lote_id, "lote");
+    let items = datos.items || {};
+    if (typeof items !== "object" || Array.isArray(items)) throw new ErrorDeDatos("Los ítems tienen que ser un objeto {id: true/false}");
+    const validos = new Set(KB.checklists[maq.tipo].map((i) => i.id));
+    items = Object.fromEntries(Object.entries(items).filter(([k]) => validos.has(k)).map(([k, v]) => [k, Boolean(v)]));
+    const c = {
+      id: proximoId(T().checklists), uid: u, operario_id: op.id, maquina_id: maq.id, lote_id: datos.lote_id ? Number(datos.lote_id) : null,
+      fecha: fecha(datos.fecha), items, resultado: evaluarChecklist(maq.tipo, items),
+      observaciones: (datos.observaciones || "").trim() || null, origen,
+    };
+    T().checklists.push(c);
+    guardar();
+    return { ...vistaChecklist(c), duplicado: false };
+  }
+
+  function registrarCalibracion(datos) {
+    const u = uid(datos);
+    const previo = T().calibraciones.find((c) => c.uid === u);
+    if (previo) return { ...previo, duplicado: true };
+    const op = obtener("operarios", datos.operario_id, "operario");
+    if (!op) throw new ErrorDeDatos("Falta el operario");
+    obtener("maquinas", datos.maquina_id, "máquina");
+    const e = datos.entradas || {};
+    let resultado, aprobada;
+    if (datos.tipo === "pulverizadora") {
+      const obj = calc.caudal(e.volumen_l_ha, e.velocidad_km_h, e.distancia_picos_cm);
+      resultado = { ...obj };
+      aprobada = true;
+      if (e.medidos_l_min && e.medidos_l_min.length) {
+        const v = calc.pastillas(obj.caudal_l_min, e.medidos_l_min);
+        resultado = { ...resultado, ...v, texto: obj.texto + " " + v.texto };
+        aprobada = v.aprobada;
+      }
+    } else if (datos.tipo === "siembra") {
+      const obj = calc.semillas(e.plantas_ha, e.distancia_surcos_cm, e.pg ?? 90, e.eficiencia ?? 90);
+      resultado = { ...obj };
+      aprobada = true;
+      if (e.contadas_10m && e.contadas_10m.length) {
+        const v = calc.siembra(e.contadas_10m, obj.semillas_por_metro);
+        resultado = { ...resultado, ...v, texto: obj.texto + " " + v.texto };
+        aprobada = v.aprobada;
+      }
+    } else if (datos.tipo === "perdidas") {
+      resultado = calc.perdidas(e.granos_m2, e.p1000_g, e.cultivo || "soja");
+      aprobada = resultado.veredicto !== "alta";
+    } else {
+      throw new ErrorDeDatos("Tipo de calibración desconocido (pulverizadora, siembra o perdidas)");
+    }
+    const c = { id: proximoId(T().calibraciones), uid: u, operario_id: op.id, maquina_id: datos.maquina_id ? Number(datos.maquina_id) : null,
+      tipo: datos.tipo, entradas: e, resultado, aprobada, fecha: fecha(datos.fecha) };
+    T().calibraciones.push(c);
+    guardar();
+    return { ...c, duplicado: false };
+  }
+
+  function registrarConsulta(datos) {
+    const u = uid(datos);
+    const previo = T().consultas.find((c) => c.uid === u);
+    if (previo) return { ...previo, duplicado: true };
+    const op = obtener("operarios", datos.operario_id, "operario");
+    if (!op) throw new ErrorDeDatos("Falta el operario");
+    const maq = obtener("maquinas", datos.maquina_id, "máquina");
+    const pregunta = (datos.pregunta || "").trim();
+    if (!pregunta) throw new ErrorDeDatos("La pregunta está vacía");
+    if (pregunta.length > 1000) throw new ErrorDeDatos("La pregunta es muy larga (máximo 1000 caracteres)");
+    let r;
+    if (datos.pedido_ayuda) r = { respuesta: "Pedido de ayuda enviado al encargado.", modo: "pedido_ayuda", guia_id: datos.guia_id || null, escalar: true };
+    else if (datos.respuesta_offline) r = { respuesta: datos.respuesta_offline, modo: "offline", guia_id: datos.guia_id || null, escalar: Boolean(datos.escalar) };
+    else r = { ...responder(pregunta, maq ? maq.tipo : null), modo: "mock" };
+    const c = { id: proximoId(T().consultas), uid: u, operario_id: op.id, maquina_id: maq ? maq.id : null, pregunta, respuesta: r.respuesta,
+      modo: r.modo, guia_id: r.guia_id, escalada: r.escalar ? 1 : 0, resuelta: 0, fecha: fecha(datos.fecha) };
+    T().consultas.push(c);
+    guardar();
+    return { ...c, duplicado: false };
+  }
+
+  function resolverConsulta(id) {
+    const c = T().consultas.find((q) => q.id === Number(id));
+    if (!c) throw new ErrorDeDatos("No existe esa consulta");
+    c.resuelta = 1;
+    guardar();
+    return { id: c.id, resuelta: true };
+  }
+
+  function registrarProgreso(datos) {
+    const op = obtener("operarios", datos.operario_id, "operario");
+    if (!op) throw new ErrorDeDatos("Falta el operario");
+    const mod = KB.modulos.find((m) => m.id === datos.modulo_id);
+    if (!mod) throw new ErrorDeDatos("Módulo desconocido");
+    const resp = datos.respuestas || [];
+    if (resp.length !== mod.preguntas.length) throw new ErrorDeDatos("Faltan respuestas");
+    const correctas = mod.preguntas.filter((p, i) => resp[i] === p.correcta).length;
+    const puntaje = Math.round(correctas * 100 / mod.preguntas.length);
+    const aprobado = puntaje >= 70;
+    const previo = T().progreso.find((p) => p.operario_id === op.id && p.modulo_id === mod.id);
+    if (!previo || puntaje >= previo.puntaje) {
+      if (previo) T().progreso.splice(T().progreso.indexOf(previo), 1);
+      T().progreso.push({ operario_id: op.id, modulo_id: mod.id, puntaje, aprobado: aprobado ? 1 : 0, fecha: ahora() });
+      guardar();
+    }
+    return { modulo_id: mod.id, puntaje, aprobado, correctas, total: mod.preguntas.length };
+  }
+
+  function progresoOperario(id) {
+    obtener("operarios", id, "operario");
+    id = Number(id);
+    const modulos = KB.modulos.map((m) => {
+      const f = T().progreso.find((p) => p.operario_id === id && p.modulo_id === m.id);
+      return { id: m.id, titulo: m.titulo, puntaje: f ? f.puntaje : null, aprobado: Boolean(f && f.aprobado) };
+    });
+    const aprobados = modulos.filter((m) => m.aprobado).length;
+    const desde = haceDias(30);
+    return {
+      operario_id: id, modulos, aprobados, total: modulos.length, porcentaje: Math.round(aprobados * 100 / modulos.length),
+      jornadas_30d: T().checklists.filter((c) => c.operario_id === id && c.fecha >= desde).length,
+      calibraciones_30d: T().calibraciones.filter((c) => c.operario_id === id && c.fecha >= desde).length,
+    };
+  }
+
+  const ordenFecha = (a, b) => (a.fecha < b.fecha ? 1 : a.fecha > b.fecha ? -1 : b.id - a.id);
+  const nombreOperario = (id) => (T().operarios.find((o) => o.id === id) || {}).nombre;
+
+  function estadoMaquina(m) {
+    const ult = T().checklists.filter((c) => c.maquina_id === m.id).sort(ordenFecha)[0] || null;
+    const motivos = [];
+    let estado = "ok";
+    if (ult && ult.fecha.slice(0, 10) === hoy()) {
+      if (ult.resultado === "no_apta") { estado = "parada"; motivos.push("Checklist de hoy NO APTA"); }
+      else if (ult.resultado === "con_observaciones") { estado = "atencion"; motivos.push("Checklist de hoy con observaciones"); }
+    }
+    const desdeService = (m.horas || 0) - (m.ultimo_service_horas || 0);
+    if (desdeService >= (m.service_cada_horas || 250)) {
+      if (estado === "ok") estado = "atencion";
+      motivos.push(`Service vencido (${Math.round(desdeService)} h desde el último)`);
+    }
+    return { estado, motivos, ultimo: ult };
+  }
+
+  function alertas(empresaId) {
+    const lista = [];
+    const maquinas = T().maquinas.filter((m) => m.empresa_id === empresaId);
+    for (const m of maquinas) {
+      const est = estadoMaquina(m);
+      for (const motivo of est.motivos) {
+        lista.push({ nivel: est.estado === "parada" ? "alta" : "media", tipo: "maquina", maquina_id: m.id, texto: `${m.apodo}: ${motivo}`,
+          detalle: motivo.startsWith("Checklist") ? (est.ultimo || {}).observaciones || null : null });
+      }
+    }
+    const ops = new Set(T().operarios.filter((o) => o.empresa_id === empresaId).map((o) => o.id));
+    const desde = haceDias(7);
+    for (const c of T().calibraciones.filter((c) => ops.has(c.operario_id) && !c.aprobada && c.fecha >= desde).sort(ordenFecha)) {
+      const apodo = (T().maquinas.find((m) => m.id === c.maquina_id) || {}).apodo;
+      lista.push({ nivel: "media", tipo: "calibracion", maquina_id: c.maquina_id, texto: `${apodo || "Calibración"}: ${c.resultado.texto || "calibración fuera de rango"}`,
+        detalle: `Registró ${nombreOperario(c.operario_id)} el ${c.fecha.slice(0, 10)}` });
+    }
+    for (const q of T().consultas.filter((q) => ops.has(q.operario_id) && q.escalada && !q.resuelta).sort(ordenFecha)) {
+      lista.push({ nivel: "alta", tipo: "consulta", consulta_id: q.id, texto: `${nombreOperario(q.operario_id)} pide ayuda: "${q.pregunta.slice(0, 90)}"`,
+        detalle: q.fecha.slice(0, 16).replace("T", " ") });
+    }
+    for (const o of T().operarios.filter((o) => o.empresa_id === empresaId && !o.rol.startsWith("Encargado"))) {
+      if (!T().checklists.some((c) => c.operario_id === o.id && c.fecha.slice(0, 10) === hoy())) {
+        lista.push({ nivel: "baja", tipo: "operario", operario_id: o.id, texto: `${o.nombre} no hizo checklist hoy`, detalle: null });
+      }
+    }
+    const orden = { alta: 0, media: 1, baja: 2 };
+    return lista.sort((a, b) => orden[a.nivel] - orden[b.nivel]);
+  }
+
+  function datosEmpresa(id) {
+    const emp = T().empresas.find((e) => e.id === id);
+    if (!emp) throw new ErrorDeDatos("No existe la empresa");
+    const deLaEmpresa = (tabla) => T()[tabla].filter((r) => r.empresa_id === id).sort((a, b) => a.id - b.id);
+    return { empresa: emp, operarios: deLaEmpresa("operarios"), maquinas: deLaEmpresa("maquinas"), lotes: deLaEmpresa("lotes") };
+  }
+
+  function impactoSemana(empresaId, dias = 7) {
+    const desde = haceDias(dias);
+    const maqs = new Set(T().maquinas.filter((m) => m.empresa_id === empresaId).map((m) => m.id));
+    const ops = new Set(T().operarios.filter((o) => o.empresa_id === empresaId).map((o) => o.id));
+    const cks = T().checklists.filter((c) => maqs.has(c.maquina_id) && c.fecha >= desde);
+    const cals = T().calibraciones.filter((c) => ops.has(c.operario_id) && c.fecha >= desde);
+    const perdidas = cals.filter((c) => c.tipo === "perdidas").map((c) => c.resultado.kg_ha);
+    const qs = T().consultas.filter((q) => ops.has(q.operario_id) && q.fecha >= desde);
+    const esc = qs.filter((q) => q.escalada);
+    return {
+      dias, checklists: cks.length, salidas_frenadas: cks.filter((c) => c.resultado === "no_apta").length,
+      calibraciones: cals.length, calibraciones_fuera_de_rango: cals.filter((c) => !c.aprobada).length,
+      mediciones_perdidas: perdidas.length, perdida_promedio_kg_ha: perdidas.length ? r1(perdidas.reduce((a, b) => a + b, 0) / perdidas.length) : null,
+      consultas: qs.length, pedidos_ayuda: esc.length, pedidos_resueltos: esc.filter((q) => q.resuelta).length,
+    };
+  }
+
+  function tablero(empresaId) {
+    const base = datosEmpresa(empresaId);
+    const maquinas = base.maquinas.map((m) => {
+      const est = estadoMaquina(m);
+      const u = est.ultimo;
+      return { ...m, estado: est.estado, motivos: est.motivos,
+        ultimo_checklist: u ? { fecha: u.fecha, resultado: u.resultado, operario: nombreOperario(u.operario_id) } : null };
+    });
+    const operarios = base.operarios.map((o) => {
+      const p = progresoOperario(o.id);
+      return { ...o, formacion_pct: p.porcentaje, modulos_aprobados: p.aprobados, jornadas_30d: p.jornadas_30d, calibraciones_30d: p.calibraciones_30d };
+    });
+    const maqs = new Set(base.maquinas.map((m) => m.id));
+    const ops = new Set(base.operarios.map((o) => o.id));
+    const checklistsHoy = T().checklists.filter((c) => maqs.has(c.maquina_id) && c.fecha.slice(0, 10) === hoy()).sort(ordenFecha)
+      .map((c) => ({ id: c.id, fecha: c.fecha, resultado: c.resultado, observaciones: c.observaciones, operario: nombreOperario(c.operario_id),
+        maquina: (T().maquinas.find((m) => m.id === c.maquina_id) || {}).apodo }));
+    const consultas = T().consultas.filter((q) => ops.has(q.operario_id)).sort(ordenFecha).slice(0, 10)
+      .map((q) => ({ id: q.id, fecha: q.fecha, pregunta: q.pregunta, modo: q.modo, escalada: q.escalada, resuelta: q.resuelta, operario: nombreOperario(q.operario_id) }));
+    const al = alertas(empresaId);
+    return {
+      empresa: base.empresa,
+      resumen: {
+        maquinas_ok: maquinas.filter((m) => m.estado === "ok").length,
+        maquinas_atencion: maquinas.filter((m) => m.estado === "atencion").length,
+        maquinas_paradas: maquinas.filter((m) => m.estado === "parada").length,
+        checklists_hoy: checklistsHoy.length,
+        alertas_altas: al.filter((a) => a.nivel === "alta").length,
+      },
+      impacto: impactoSemana(empresaId), maquinas, operarios, alertas: al, checklists_hoy: checklistsHoy, consultas, lotes: base.lotes,
+    };
+  }
+
+  function constanciaLote(id) {
+    const lote = obtener("lotes", id, "lote");
+    if (!lote) throw new ErrorDeDatos("Falta el lote");
+    const labores = T().checklists.filter((c) => c.lote_id === lote.id).sort(ordenFecha).map((c) => {
+      const m = T().maquinas.find((x) => x.id === c.maquina_id);
+      const dia = c.fecha.slice(0, 10);
+      const d0 = new Date(dia + "T00:00:00"); d0.setDate(d0.getDate() - 3);
+      const desde = iso(d0).slice(0, 10);
+      const cals = T().calibraciones.filter((k) => k.maquina_id === c.maquina_id && k.fecha.slice(0, 10) >= desde && k.fecha.slice(0, 10) <= dia);
+      return { fecha: c.fecha, operario: nombreOperario(c.operario_id), maquina: m.apodo, tipo: m.tipo, marca: m.marca, checklist: c.resultado,
+        observaciones: c.observaciones, calibraciones: cals.map((k) => ({ tipo: k.tipo, fecha: k.fecha, aprobada: Boolean(k.aprobada), texto: k.resultado.texto })) };
+    });
+    const empresa = T().empresas.find((e) => e.id === lote.empresa_id).nombre;
+    return { lote, contratista: empresa, labores, emitida: ahora() };
+  }
+
+  function sincronizar(ops) {
+    if (!Array.isArray(ops)) throw new ErrorDeDatos("Se esperaba una lista de operaciones");
+    const fns = { checklist: (d) => registrarChecklist(d, "offline"), calibracion: registrarCalibracion, consulta: registrarConsulta, progreso: registrarProgreso };
+    const resultados = ops.map((op) => {
+      const datos = (op && op.datos) || {};
+      const fn = fns[op && op.tipo];
+      if (!fn) return { uid: datos.uid, ok: false, error: `Tipo desconocido: ${op && op.tipo}` };
+      try { const r = fn(datos); return { uid: datos.uid, ok: true, duplicado: Boolean(r.duplicado) }; }
+      catch (e) { if (e instanceof ErrorDeDatos) return { uid: datos.uid, ok: false, error: e.message }; throw e; }
+    });
+    return { procesadas: resultados.length, ok: resultados.filter((r) => r.ok).length, resultados };
+  }
+
+  // ------------------------------------------------------------- rutas (app.py)
+  function rutear(metodo, ruta, cuerpo) {
+    const [path, query] = ruta.split("?");
+    const empresaId = Number(new URLSearchParams(query || "").get("empresa_id") || 1);
+    const partes = path.split("/");
+    if (metodo === "GET") {
+      if (path === "/api/salud") return [200, { ok: true, modo_asistente: "mock" }];
+      if (path === "/api/conocimiento") return [200, KB];
+      if (path === "/api/empresa") return [200, datosEmpresa(empresaId)];
+      if (path === "/api/tablero") return [200, tablero(empresaId)];
+      if (path.startsWith("/api/lotes/") && path.endsWith("/constancia")) return [200, constanciaLote(numero(partes[3]))];
+      if (path.startsWith("/api/operarios/") && path.endsWith("/progreso")) return [200, progresoOperario(numero(partes[3]))];
+    } else {
+      if (path === "/api/checklists") return [201, registrarChecklist(cuerpo)];
+      if (path === "/api/calibraciones") return [201, registrarCalibracion(cuerpo)];
+      if (path === "/api/consultas") return [201, registrarConsulta(cuerpo)];
+      if (path === "/api/progreso") return [201, registrarProgreso(cuerpo)];
+      if (path === "/api/sync") return [200, sincronizar(cuerpo.operaciones)];
+      if (path.startsWith("/api/consultas/") && path.endsWith("/resolver")) return [200, resolverConsulta(numero(partes[3]))];
+    }
+    return [404, { error: "No encontrado" }];
+  }
+
+  function numero(texto) {
+    if (!/^\d+$/.test(texto || "")) throw new ErrorDeDatos("Parámetro inválido");
+    return Number(texto);
+  }
+
+  const fetchOriginal = window.fetch ? window.fetch.bind(window) : null;
+  window.fetch = async function (entrada, opciones = {}) {
+    if (typeof entrada !== "string" || !entrada.startsWith("/api/")) return fetchOriginal(entrada, opciones);
+    if (demo.sinSenal) throw new TypeError("Sin conexión (simulada)");
+    await new Promise((r) => setTimeout(r, 150));
+    let estado, datos;
+    try {
+      const cuerpo = opciones.body ? JSON.parse(opciones.body) : {};
+      [estado, datos] = rutear((opciones.method || "GET").toUpperCase(), entrada, cuerpo);
+    } catch (e) {
+      if (!(e instanceof ErrorDeDatos) && !(e instanceof SyntaxError)) console.error(e);
+      [estado, datos] = [e instanceof ErrorDeDatos || e instanceof SyntaxError ? 400 : 500, { error: e.message }];
+    }
+    return new Response(JSON.stringify(datos), { status: estado, headers: { "Content-Type": "application/json" } });
+  };
+
+  // "Sin señal" simulado: la app consulta navigator.onLine y escucha los eventos online/offline.
+  try { Object.defineProperty(navigator, "onLine", { configurable: true, get: () => !demo.sinSenal }); } catch { /* el fetch igual falla */ }
+  demo.simularSinSenal = function (activar) {
+    demo.sinSenal = activar;
+    window.dispatchEvent(new Event(activar ? "offline" : "online"));
+  };
+})();
+
+</script>
+<script>
+/* Copiloto Rural — app del maquinista y tablero del dueño.
+   Vanilla JS, sin dependencias. Funciona sin señal: el conocimiento queda guardado
+   y lo que se carga se encola en el teléfono hasta que vuelve la conexión. */
+"use strict";
+
+const $vista = document.getElementById("vista");
+const $titulo = document.getElementById("titulo");
+const $senal = document.getElementById("senal");
+const $volver = document.getElementById("btn-volver");
+
+const estado = {
+  conocimiento: null,
+  empresa: null,
+  operarioId: null,
+  maquinaId: null,
+  chat: [],
+};
+
+// ---------------------------------------------------------------- almacenamiento
+const guardado = {
+  leer(clave, porDefecto) {
+    try { const v = localStorage.getItem("copiloto." + clave); return v ? JSON.parse(v) : porDefecto; }
+    catch { return porDefecto; }
+  },
+  escribir(clave, valor) {
+    try { localStorage.setItem("copiloto." + clave, JSON.stringify(valor)); } catch { /* sin espacio o modo privado */ }
+  },
+};
+
+function uid() {
+  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return "u" + Date.now().toString(36) + Math.random().toString(36).slice(2);
+}
+
+function ahoraISO() {
+  const d = new Date();
+  const p = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+}
+
+function esc(t) {
+  return String(t ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+// ---------------------------------------------------------------- red y cola offline
+async function api(ruta, opciones = {}) {
+  const resp = await fetch(ruta, {
+    headers: { "Content-Type": "application/json" },
+    ...opciones,
+    body: opciones.body ? JSON.stringify(opciones.body) : undefined,
+  });
+  const datos = await resp.json().catch(() => ({}));
+  if (!resp.ok) {
+    const err = new Error(datos.error || "Error del servidor");
+    err.status = resp.status;
+    throw err;
+  }
+  return datos;
+}
+
+function cola() { return guardado.leer("cola", []); }
+
+function encolar(tipo, datos) {
+  const c = cola();
+  c.push({ tipo, datos });
+  guardado.escribir("cola", c);
+  pintarSenal();
+}
+
+/** Intenta mandar al servidor; si no hay señal, lo guarda en la cola. Devuelve {online, datos}. */
+async function enviar(ruta, tipo, datos) {
+  if (navigator.onLine) {
+    try {
+      return { online: true, datos: await api(ruta, { method: "POST", body: datos }) };
+    } catch (e) {
+      if (e.status && e.status < 500) throw e; // error de datos: mostrarlo
+    }
+  }
+  encolar(tipo, datos);
+  return { online: false, datos: null };
+}
+
+async function sincronizar() {
+  const pendientes = cola();
+  if (!pendientes.length || !navigator.onLine) return;
+  try {
+    const r = await api("/api/sync", { method: "POST", body: { operaciones: pendientes } });
+    // Se descartan las que entraron o fallaron por datos; quedan solo las que no se procesaron.
+    const procesados = new Set(r.resultados.map((x) => x.uid));
+    guardado.escribir("cola", pendientes.filter((p) => !procesados.has(p.datos.uid)));
+  } catch { /* se reintenta después */ }
+  pintarSenal();
+}
+
+function pintarSenal() {
+  const n = cola().length;
+  const online = navigator.onLine;
+  $senal.className = "senal" + (online ? "" : " sin");
+  $senal.textContent = (online ? "Con señal" : "Sin señal") + (n ? ` · ${n} por enviar` : "");
+}
+
+window.addEventListener("online", () => { pintarSenal(); sincronizar(); });
+window.addEventListener("offline", pintarSenal);
+
+async function cargarBase() {
+  try {
+    estado.conocimiento = await api("/api/conocimiento");
+    estado.empresa = await api("/api/empresa");
+    guardado.escribir("conocimiento", estado.conocimiento);
+    guardado.escribir("empresa", estado.empresa);
+  } catch {
+    estado.conocimiento = guardado.leer("conocimiento", null);
+    estado.empresa = guardado.leer("empresa", null);
+  }
+  estado.operarioId = guardado.leer("operarioId", null);
+  estado.maquinaId = guardado.leer("maquinaId", null);
+}
+
+// ---------------------------------------------------------------- utilidades de datos
+const operario = () => estado.empresa?.operarios.find((o) => o.id === estado.operarioId);
+const maquina = (id = estado.maquinaId) => estado.empresa?.maquinas.find((m) => m.id === id);
+const nombreTipo = (t) => estado.conocimiento?.tipos_maquina[t] || t;
+const nombreCultivo = (c) => ({ maiz: "maíz" }[c] || c || "");
+
+function opcionesMaquinas(seleccion, tipos) {
+  return estado.empresa.maquinas
+    .filter((m) => !tipos || tipos.includes(m.tipo))
+    .map((m) => `<option value="${m.id}" ${m.id === seleccion ? "selected" : ""}>${esc(m.apodo)} — ${esc(nombreTipo(m.tipo))} ${esc(m.marca || "")}</option>`)
+    .join("");
+}
+
+function opcionesLotes() {
+  return `<option value="">(sin lote)</option>` + estado.empresa.lotes
+    .map((l) => `<option value="${l.id}">${esc(l.nombre)} — ${esc(l.cliente)}</option>`).join("");
+}
+
+// ---------------------------------------------------------------- cálculos (espejo de copiloto/calculos.py)
+const calc = {
+  caudal(vol, vel, dist) { return (vol * vel * dist) / 60000; },
+  pastillas(obj, medidos, tol = 10) {
+    const det = medidos.map((m, i) => ({ n: i + 1, m, desvio: ((m - obj) / obj) * 100 }));
+    det.forEach((d) => (d.ok = Math.abs(d.desvio) <= tol));
+    return { det, malas: det.filter((d) => !d.ok).map((d) => d.n) };
+  },
+  semillasMetro(plHa, distCm, pg, ef) { return (plHa * (distCm / 100)) / 10000 / ((pg / 100) * (ef / 100)); },
+  perdidas(granos, p1000) { return (granos * p1000) / 100; },
+};
+
+// ---------------------------------------------------------------- buscador offline (espejo de asistente.py)
+function normalizar(t) { return (t || "").toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, ""); }
+
+function buscarGuia(pregunta, tipo) {
+  const t = normalizar(pregunta);
+  let mejor = null, puntajeMejor = 0;
+  for (const g of estado.conocimiento.guias) {
+    let p = 0;
+    for (const palabra of g.palabras) if (t.includes(normalizar(palabra))) p += palabra.includes(" ") ? 2 : 1;
+    if (!p) continue;
+    if (tipo && g.maquina === tipo) p += 1.5;
+    if (p > puntajeMejor) { mejor = g; puntajeMejor = p; }
+  }
+  return mejor;
+}
+
+function textoGuia(g) {
+  return `${g.titulo}\n\n${g.pasos.map((p, i) => `${i + 1}. ${p}`).join("\n")}\n\nCuándo parar: ${g.parar}`;
+}
+
+// ---------------------------------------------------------------- navegación
+const rutas = {};
+function ruta(nombre, titulo, fn) { rutas[nombre] = { titulo, fn }; }
+
+// La ruta vive en memoria y se refleja en la URL cuando el navegador lo permite
+// (en algunos marcos embebidos no se puede tocar la URL; la app sigue andando igual).
+let rutaActual = location.hash || "#/inicio";
+
+function ir(hash) {
+  rutaActual = hash;
+  try { history.pushState(null, "", hash); } catch { /* marco sin acceso al historial */ }
+  render();
+}
+
+function alNavegar() {
+  const h = location.hash || "#/inicio";
+  if (h === rutaActual) return;
+  rutaActual = h;
+  render();
+}
+
+async function render() {
+  const [nombre, ...params] = (rutaActual.replace(/^#\/?/, "") || "inicio").split("/");
+  const r = rutas[nombre] || rutas.inicio;
+  $titulo.textContent = r.titulo;
+  $volver.hidden = nombre === "inicio";
+  if (!estado.conocimiento || !estado.empresa) {
+    $vista.innerHTML = `<div class="tarjeta peligro"><p class="resultado">No hay datos guardados todavía</p>
+      <p>Abrí la app una vez con señal para que se guarde lo necesario para usarla en el campo.</p></div>`;
+    return;
+  }
+  await r.fn(...params);
+  $vista.focus({ preventScroll: true });
+  window.scrollTo(0, 0);
+}
+
+$volver.addEventListener("click", () => {
+  const actual = rutaActual.replace(/^#\/?/, "").split("/")[0];
+  if (actual === "tablero" || actual === "operario") ir("#/inicio");
+  else if (actual === "constancia") ir("#/tablero");
+  else if (estado.operarioId) ir("#/operario");
+  else ir("#/inicio");
+});
+window.addEventListener("hashchange", alNavegar);
+window.addEventListener("popstate", alNavegar);
+
+// ---------------------------------------------------------------- pantallas
+ruta("inicio", "Copiloto Rural", () => {
+  $vista.innerHTML = `
+    <h2>¿Quién sos?</h2>
+    <div class="grilla">
+      <button class="boton" data-ir="#/elegir"><span class="ico">👷</span><span>Soy maquinista u operario<small>Checklist, calibrar, problemas, preguntar</small></span></button>
+      <button class="boton" data-ir="#/tablero"><span class="ico">📋</span><span>Soy dueño o encargado<small>Estado del equipo y alertas</small></span></button>
+    </div>
+    <p class="suave" style="margin-top:20px">${esc(estado.empresa.empresa.nombre)} · ${esc(estado.empresa.empresa.localidad)}</p>`;
+});
+
+ruta("elegir", "¿Cuál es tu nombre?", () => {
+  const ops = estado.empresa.operarios.filter((o) => !o.rol.startsWith("Encargado"));
+  $vista.innerHTML = `<div class="grilla">${ops.map((o) => `
+    <button class="boton" data-operario="${o.id}"><span class="ico">🙋</span><span>${esc(o.nombre)}<small>${esc(o.rol)}</small></span></button>`).join("")}</div>`;
+  $vista.querySelectorAll("[data-operario]").forEach((b) => b.addEventListener("click", () => {
+    estado.operarioId = Number(b.dataset.operario);
+    guardado.escribir("operarioId", estado.operarioId);
+    ir("#/operario");
+  }));
+});
+
+ruta("operario", "Mi jornada", () => {
+  const op = operario();
+  if (!op) return ir("#/elegir");
+  $vista.innerHTML = `
+    <h2>Hola, ${esc(op.nombre.split(" ")[0])}</h2>
+    <label for="sel-maquina">¿Con qué máquina trabajás hoy?</label>
+    <select id="sel-maquina"><option value="">Elegí la máquina</option>${opcionesMaquinas(estado.maquinaId)}</select>
+    <div class="grilla dos" style="margin-top:16px">
+      <button class="boton" data-ir="#/checklist"><span class="ico">✅</span><span>Checklist antes de salir<small>2 minutos</small></span></button>
+      <button class="boton" data-ir="#/calibrar"><span class="ico">📏</span><span>Calibrar<small>Pulverizadora, sembradora, pérdidas</small></span></button>
+      <button class="boton" data-ir="#/problema"><span class="ico">🔧</span><span>Tengo un problema<small>Guías paso a paso</small></span></button>
+      <button class="boton" data-ir="#/preguntar"><span class="ico">💬</span><span>Preguntar al Copiloto<small>Escribí tu duda</small></span></button>
+      <button class="boton" data-ir="#/aprender"><span class="ico">🎓</span><span>Aprender y mi progreso<small>Lecciones cortas</small></span></button>
+    </div>
+    <p style="margin-top:18px"><button class="enlace" id="cambiar">No soy ${esc(op.nombre.split(" ")[0])}</button></p>`;
+  document.getElementById("sel-maquina").addEventListener("change", (e) => {
+    estado.maquinaId = e.target.value ? Number(e.target.value) : null;
+    guardado.escribir("maquinaId", estado.maquinaId);
+  });
+  document.getElementById("cambiar").addEventListener("click", () => {
+    estado.operarioId = null; guardado.escribir("operarioId", null); ir("#/elegir");
+  });
+});
+
+function pedirMaquina(siguiente) {
+  $vista.innerHTML = `<h2>Primero elegí la máquina</h2>
+    <select id="sel-maquina"><option value="">Elegí la máquina</option>${opcionesMaquinas(null)}</select>`;
+  document.getElementById("sel-maquina").addEventListener("change", (e) => {
+    if (!e.target.value) return;
+    estado.maquinaId = Number(e.target.value);
+    guardado.escribir("maquinaId", estado.maquinaId);
+    render(siguiente);
+  });
+}
+
+// ---- Checklist
+ruta("checklist", "Checklist antes de salir", () => {
+  const m = maquina();
+  if (!operario()) return ir("#/elegir");
+  if (!m) return pedirMaquina();
+  const items = estado.conocimiento.checklists[m.tipo];
+  const respuestas = {};
+  $vista.innerHTML = `
+    <h2>${esc(m.apodo)} <span class="suave">· ${esc(nombreTipo(m.tipo))}</span></h2>
+    <p class="suave">Tocá <b>Bien</b> o <b>Mal</b> en cada punto. Los marcados <b style="color:var(--peligro)">CRÍTICO</b> no dejan salir la máquina.</p>
+    <div id="items">${items.map((i) => `
+      <div class="item" data-item="${i.id}">
+        <div class="texto">${esc(i.texto)}${i.critico ? '<span class="critico">CRÍTICO</span>' : ""}</div>
+        <div class="opciones">
+          <button type="button" class="si" data-valor="1">👍 Bien</button>
+          <button type="button" class="no" data-valor="0">👎 Mal</button>
+        </div>
+      </div>`).join("")}</div>
+    <label for="lote">Lote (opcional)</label>
+    <select id="lote">${opcionesLotes()}</select>
+    <label for="obs">¿Algo para avisar? (opcional)</label>
+    <textarea id="obs" placeholder="Ej: pierde aceite el cardán"></textarea>
+    <p id="faltan" class="aviso oculto"></p>
+    <button class="boton primario" id="guardar" style="margin-top:14px">Terminar checklist</button>`;
+  $vista.querySelectorAll(".item").forEach((div) => {
+    div.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
+      const ok = b.dataset.valor === "1";
+      respuestas[div.dataset.item] = ok;
+      div.classList.toggle("bien", ok); div.classList.toggle("mal", !ok);
+      div.querySelectorAll("button").forEach((x) => x.classList.toggle("activo", x === b));
+    }));
+  });
+  document.getElementById("guardar").addEventListener("click", async () => {
+    const faltan = items.filter((i) => !(i.id in respuestas));
+    const $f = document.getElementById("faltan");
+    if (faltan.length) {
+      $f.textContent = `Te faltan ${faltan.length} punto(s) por revisar.`;
+      $f.classList.remove("oculto");
+      return;
+    }
+    const datos = {
+      uid: uid(), operario_id: estado.operarioId, maquina_id: m.id,
+      lote_id: document.getElementById("lote").value ? Number(document.getElementById("lote").value) : null,
+      items: respuestas, observaciones: document.getElementById("obs").value, fecha: ahoraISO(),
+    };
+    try {
+      const r = await enviar("/api/checklists", "checklist", datos);
+      mostrarResultadoChecklist(r.datos || resultadoLocal(m.tipo, respuestas), r.online);
+    } catch (e) { $f.textContent = e.message; $f.classList.remove("oculto"); }
+  });
+});
+
+function resultadoLocal(tipo, respuestas) {
+  const items = estado.conocimiento.checklists[tipo];
+  const fallados = items.filter((i) => !respuestas[i.id]);
+  const resultado = fallados.some((i) => i.critico) ? "no_apta" : fallados.length ? "con_observaciones" : "apta";
+  const mensaje = {
+    apta: "Máquina lista para salir. ¡Buen trabajo!",
+    con_observaciones: "Puede salir, pero hay cosas para revisar. Quedan anotadas para el encargado.",
+    no_apta: "NO SALE. Hay un punto crítico que resolver antes. Avisale al encargado.",
+  }[resultado];
+  return { resultado, fallados, mensaje };
+}
+
+function mostrarResultadoChecklist(r, online) {
+  const clase = { apta: "ok", con_observaciones: "atencion", no_apta: "peligro" }[r.resultado];
+  const icono = { apta: "✅", con_observaciones: "⚠️", no_apta: "⛔" }[r.resultado];
+  $vista.innerHTML = `
+    <div class="tarjeta ${clase}">
+      <p class="resultado">${icono} ${esc(r.mensaje)}</p>
+      ${r.fallados.length ? `<p><b>Para revisar:</b></p><ul>${r.fallados.map((f) => `<li>${esc(f.texto)}${f.critico ? " <b>(crítico)</b>" : ""}</li>`).join("")}</ul>` : ""}
+    </div>
+    ${online ? "" : '<p class="aviso">Sin señal: quedó guardado en el teléfono y se manda solo cuando vuelva la señal.</p>'}
+    <div class="grilla">
+      ${r.resultado !== "apta" ? '<button class="boton" data-ir="#/problema"><span class="ico">🔧</span><span>Ver cómo resolverlo</span></button>' : ""}
+      <button class="boton primario" data-ir="#/operario">Volver al inicio</button>
+    </div>`;
+}
+
+// ---- Calibrar
+ruta("calibrar", "Calibrar", () => {
+  $vista.innerHTML = `
+    <div class="grilla">
+      <button class="boton" data-ir="#/cal-pulverizadora"><span class="ico">💧</span><span>Pulverizadora<small>Caudal por pastilla y prueba de jarra</small></span></button>
+      <button class="boton" data-ir="#/cal-siembra"><span class="ico">🌱</span><span>Sembradora<small>Semillas por metro y control a campo</small></span></button>
+      <button class="boton" data-ir="#/cal-perdidas"><span class="ico">🌾</span><span>Pérdidas de cosecha<small>Método de los aros (INTA)</small></span></button>
+    </div>
+    <p class="suave" style="margin-top:16px">Las cuentas se hacen en el teléfono: funcionan sin señal.</p>`;
+});
+
+function bloqueResultado(clase, html) { return `<div class="tarjeta ${clase}" id="res">${html}</div>`; }
+
+async function guardarCalibracion(tipo, entradas, maquinaId) {
+  const datos = { uid: uid(), operario_id: estado.operarioId, maquina_id: maquinaId || null, tipo, entradas, fecha: ahoraISO() };
+  const r = await enviar("/api/calibraciones", "calibracion", datos);
+  return r.online ? "Guardado. El encargado lo ve en su tablero." : "Sin señal: guardado en el teléfono, se manda cuando vuelva la señal.";
+}
+
+ruta("cal-pulverizadora", "Calibrar pulverizadora", () => {
+  if (!operario()) return ir("#/elegir");
+  const m = maquina();
+  $vista.innerHTML = `
+    <label for="maq">Máquina</label>
+    <select id="maq">${opcionesMaquinas(m && m.tipo === "pulverizadora" ? m.id : null, ["pulverizadora"])}</select>
+    <div class="fila">
+      <div><label for="vol">Volumen (L/ha)</label><input id="vol" inputmode="decimal" value="80"></div>
+      <div><label for="vel">Velocidad (km/h)</label><input id="vel" inputmode="decimal" value="18"></div>
+    </div>
+    <label for="dist">Distancia entre picos (cm)</label><input id="dist" inputmode="decimal" value="52.5">
+    <div class="tarjeta" id="obj" style="margin-top:12px"></div>
+    <h3>Prueba de jarra (opcional)</h3>
+    <p class="suave">Juntá lo que tira cada pastilla en 1 minuto y cargalo en litros (ej: 1.25). Dejá vacías las que no mediste.</p>
+    <div class="mini-grilla" id="jarra">${Array.from({ length: 8 }, (_, i) => `<input inputmode="decimal" aria-label="Pastilla ${i + 1}" placeholder="P${i + 1}">`).join("")}</div>
+    <div id="salida"></div>
+    <button class="boton primario" id="guardar" style="margin-top:14px">Calcular y guardar</button>`;
+  const num = (id) => parseFloat(String(document.getElementById(id).value).replace(",", "."));
+  const pintarObj = () => {
+    const q = calc.caudal(num("vol"), num("vel"), num("dist"));
+    document.getElementById("obj").innerHTML = isFinite(q) && q > 0
+      ? `<p class="resultado">Cada pastilla tiene que tirar ${q.toFixed(2)} L/min</p>` : `<p>Completá los tres datos.</p>`;
+    return q;
+  };
+  ["vol", "vel", "dist"].forEach((id) => document.getElementById(id).addEventListener("input", pintarObj));
+  pintarObj();
+  document.getElementById("guardar").addEventListener("click", async () => {
+    const q = pintarObj();
+    if (!(q > 0)) return;
+    const medidos = [...document.querySelectorAll("#jarra input")].map((i) => parseFloat(i.value.replace(",", "."))).filter((v) => v > 0);
+    let html = `<p class="resultado">Objetivo: ${q.toFixed(2)} L/min por pastilla</p>`, clase = "ok";
+    if (medidos.length) {
+      const r = calc.pastillas(q, medidos);
+      clase = r.malas.length ? "atencion" : "ok";
+      html += `<table><tr><th>Pastilla</th><th>Medido</th><th>Desvío</th></tr>${r.det.map((d) =>
+        `<tr><td>${d.n}</td><td>${d.m.toFixed(2)}</td><td>${d.ok ? "✅" : "❌"} ${d.desvio.toFixed(1)}%</td></tr>`).join("")}</table>
+        <p>${r.malas.length ? `<b>Limpiá o cambiá:</b> ${r.malas.join(", ")} (se acepta ±10%).` : "Todas dentro de ±10%. Bien."}</p>`;
+    }
+    const msj = await guardarCalibracion("pulverizadora", {
+      volumen_l_ha: num("vol"), velocidad_km_h: num("vel"), distancia_picos_cm: num("dist"), medidos_l_min: medidos,
+    }, Number(document.getElementById("maq").value) || null).catch((e) => e.message);
+    document.getElementById("salida").innerHTML = bloqueResultado(clase, html + `<p class="suave">${esc(msj)}</p>`);
+    document.getElementById("res").scrollIntoView({ behavior: "smooth" });
+  });
+});
+
+ruta("cal-siembra", "Calibrar sembradora", () => {
+  if (!operario()) return ir("#/elegir");
+  const m = maquina();
+  $vista.innerHTML = `
+    <label for="maq">Máquina</label>
+    <select id="maq">${opcionesMaquinas(m && m.tipo === "sembradora" ? m.id : null, ["sembradora"])}</select>
+    <div class="fila">
+      <div><label for="pl">Plantas/ha objetivo</label><input id="pl" inputmode="numeric" value="80000"></div>
+      <div><label for="dist">Entre surcos (cm)</label><input id="dist" inputmode="decimal" value="52.5"></div>
+    </div>
+    <div class="fila">
+      <div><label for="pg">Poder germinativo (%)</label><input id="pg" inputmode="numeric" value="95"></div>
+      <div><label for="ef">Logro a campo (%)</label><input id="ef" inputmode="numeric" value="90"></div>
+    </div>
+    <div class="tarjeta" id="obj" style="margin-top:12px"></div>
+    <h3>Control a campo (opcional)</h3>
+    <p class="suave">Sembrá 50 m, destapá y contá las semillas en 10 m de cada cuerpo.</p>
+    <div class="mini-grilla" id="cuerpos">${Array.from({ length: 8 }, (_, i) => `<input inputmode="numeric" aria-label="Cuerpo ${i + 1}" placeholder="C${i + 1}">`).join("")}</div>
+    <p class="suave">Velocidad recomendada por el INTA: <b>5 a 8 km/h</b> según la máquina.</p>
+    <div id="salida"></div>
+    <button class="boton primario" id="guardar" style="margin-top:14px">Calcular y guardar</button>`;
+  const num = (id) => parseFloat(String(document.getElementById(id).value).replace(",", "."));
+  const pintarObj = () => {
+    const s = calc.semillasMetro(num("pl"), num("dist"), num("pg"), num("ef"));
+    document.getElementById("obj").innerHTML = isFinite(s) && s > 0
+      ? `<p class="resultado">Tirá ${s.toFixed(1)} semillas por metro</p><p>En 10 metros tenés que contar <b>${Math.round(s * 10)}</b>.</p>`
+      : `<p>Completá los datos.</p>`;
+    return s;
+  };
+  ["pl", "dist", "pg", "ef"].forEach((id) => document.getElementById(id).addEventListener("input", pintarObj));
+  pintarObj();
+  document.getElementById("guardar").addEventListener("click", async () => {
+    const s = pintarObj();
+    if (!(s > 0)) return;
+    const contadas = [...document.querySelectorAll("#cuerpos input")].map((i) => parseFloat(i.value)).filter((v) => v >= 0);
+    let html = `<p class="resultado">Objetivo: ${Math.round(s * 10)} semillas en 10 m</p>`, clase = "ok";
+    if (contadas.length) {
+      const obj = s * 10;
+      const det = contadas.map((c, i) => ({ n: i + 1, c, d: ((c - obj) / obj) * 100 }));
+      const malos = det.filter((x) => Math.abs(x.d) > 5);
+      clase = malos.length ? "atencion" : "ok";
+      html += `<table><tr><th>Cuerpo</th><th>Contadas</th><th>Desvío</th></tr>${det.map((x) =>
+        `<tr><td>${x.n}</td><td>${x.c}</td><td>${Math.abs(x.d) <= 5 ? "✅" : "❌"} ${x.d.toFixed(1)}%</td></tr>`).join("")}</table>
+        <p>${malos.length ? `<b>Revisá los cuerpos:</b> ${malos.map((x) => x.n).join(", ")} (se acepta ±5%).` : "Todos los cuerpos bien."}</p>`;
+    }
+    const msj = await guardarCalibracion("siembra", {
+      plantas_ha: num("pl"), distancia_surcos_cm: num("dist"), pg: num("pg"), eficiencia: num("ef"), contadas_10m: contadas,
+    }, Number(document.getElementById("maq").value) || null).catch((e) => e.message);
+    document.getElementById("salida").innerHTML = bloqueResultado(clase, html + `<p class="suave">${esc(msj)}</p>`);
+    document.getElementById("res").scrollIntoView({ behavior: "smooth" });
+  });
+});
+
+ruta("cal-perdidas", "Pérdidas de cosecha", () => {
+  if (!operario()) return ir("#/elegir");
+  const m = maquina();
+  const p1000 = estado.conocimiento.p1000_tipico_g;
+  $vista.innerHTML = `
+    <p class="suave">Tirá 4 aros de 56 cm de diámetro detrás de la máquina (suman ~1 m²) y contá los granos que quedaron en el suelo dentro de los aros.</p>
+    <label for="maq">Máquina</label>
+    <select id="maq">${opcionesMaquinas(m && m.tipo === "cosechadora" ? m.id : null, ["cosechadora"])}</select>
+    <label for="cult">Cultivo</label>
+    <select id="cult">${Object.keys(p1000).map((c) => `<option value="${c}">${nombreCultivo(c)[0].toUpperCase() + nombreCultivo(c).slice(1)}</option>`).join("")}</select>
+    <div class="fila">
+      <div><label for="gr">Granos en 1 m²</label><input id="gr" inputmode="numeric" value="60"></div>
+      <div><label for="p1000">Peso de 1000 granos (g)</label><input id="p1000" inputmode="decimal" value="${p1000.soja}"></div>
+    </div>
+    <div id="salida"></div>
+    <button class="boton primario" id="guardar" style="margin-top:14px">Calcular y guardar</button>`;
+  document.getElementById("cult").addEventListener("change", (e) => { document.getElementById("p1000").value = p1000[e.target.value]; });
+  document.getElementById("guardar").addEventListener("click", async () => {
+    const cultivo = document.getElementById("cult").value;
+    const granos = parseFloat(document.getElementById("gr").value);
+    const pmil = parseFloat(String(document.getElementById("p1000").value).replace(",", "."));
+    if (!(granos >= 0) || !(pmil > 0)) return;
+    const kg = calc.perdidas(granos, pmil);
+    const tol = estado.conocimiento.tolerancia_perdida_kg_ha[cultivo];
+    let clase = "ok", texto;
+    if (tol === undefined) { clase = "atencion"; texto = `No hay una tolerancia verificada cargada para ${cultivo}: consultala con el técnico.`; }
+    else if (kg <= tol) texto = `Dentro de la tolerancia del INTA (${tol} kg/ha). Bien.`;
+    else { clase = "peligro"; texto = `Arriba de la tolerancia del INTA (${tol} kg/ha): te sobran ${Math.round(kg - tol)} kg/ha. Revisá la regulación.`; }
+    const msj = await guardarCalibracion("perdidas", { granos_m2: granos, p1000_g: pmil, cultivo },
+      Number(document.getElementById("maq").value) || null).catch((e) => e.message);
+    document.getElementById("salida").innerHTML = bloqueResultado(clase,
+      `<p class="resultado">Pérdida: ${Math.round(kg)} kg/ha</p><p>${esc(texto)}</p>
+       ${clase === "peligro" ? '<button class="boton" data-ir="#/problema/cosechadora"><span class="ico">🔧</span><span>Ver cómo bajar las pérdidas</span></button>' : ""}
+       <p class="suave">${esc(msj)}</p>`);
+    document.getElementById("res").scrollIntoView({ behavior: "smooth" });
+  });
+});
+
+// ---- Tengo un problema
+ruta("problema", "Tengo un problema", (tipo) => {
+  const m = maquina();
+  tipo = tipo || (m && m.tipo);
+  const tipos = Object.keys(estado.conocimiento.tipos_maquina);
+  const guias = estado.conocimiento.guias.filter((g) => !tipo || g.maquina === tipo);
+  $vista.innerHTML = `
+    <div class="chips">${tipos.map((t) => `<button data-ir="#/problema/${t}" ${t === tipo ? 'style="border-color:var(--primario);font-weight:700"' : ""}>${esc(nombreTipo(t))}</button>`).join("")}</div>
+    <h2>¿Qué te pasa?</h2>
+    <div class="grilla">${guias.map((g) => `<button class="boton" data-ir="#/guia/${g.id}"><span class="ico">❓</span><span>${esc(g.titulo)}</span></button>`).join("")}</div>
+    <p style="margin-top:16px"><button class="boton" data-ir="#/preguntar"><span class="ico">💬</span><span>No está mi problema: preguntar</span></button></p>`;
+});
+
+ruta("guia", "Paso a paso", (id) => {
+  const g = estado.conocimiento.guias.find((x) => x.id === id);
+  if (!g) return ir("#/problema");
+  $vista.innerHTML = `
+    <h2>${esc(g.titulo)}</h2>
+    <ol class="pasos">${g.pasos.map((p) => `<li>${esc(p)}</li>`).join("")}</ol>
+    <div class="tarjeta peligro"><b>Cuándo parar:</b> ${esc(g.parar)}</div>
+    <h3>¿Se solucionó?</h3>
+    <div class="grilla dos">
+      <button class="boton" id="si"><span class="ico">👍</span><span>Sí, listo</span></button>
+      <button class="boton" id="no"><span class="ico">🆘</span><span>No, pedir ayuda al encargado</span></button>
+    </div>
+    <div id="salida"></div>`;
+  document.getElementById("si").addEventListener("click", () => ir("#/operario"));
+  document.getElementById("no").addEventListener("click", async () => {
+    if (!operario()) return ir("#/elegir");
+    const datos = {
+      uid: uid(), operario_id: estado.operarioId, maquina_id: estado.maquinaId,
+      pregunta: `Seguí la guía "${g.titulo}" y no se solucionó. Necesito ayuda.`,
+      pedido_ayuda: true, guia_id: g.id, fecha: ahoraISO(),
+    };
+    const r = await enviar("/api/consultas", "consulta", datos).catch(() => ({ online: false }));
+    document.getElementById("salida").innerHTML = `<div class="tarjeta atencion"><p class="resultado">🆘 Pedido de ayuda ${r.online ? "enviado" : "guardado"}</p>
+      <p>${r.online ? "El encargado lo ve en su tablero." : "Sin señal: se manda solo cuando vuelva. Si es urgente, llamalo por teléfono."}</p></div>`;
+  });
+});
+
+// ---- Preguntar (chat)
+ruta("preguntar", "Preguntar al Copiloto", () => {
+  if (!operario()) return ir("#/elegir");
+  const sugerencias = ["La sembradora deja dobles", "Las pastillas tiran distinto", "Se pierde grano por la cola", "El motor calienta", "Hay mucho viento para aplicar"];
+  const pintarChat = () => estado.chat.map((c) => `<div class="burbuja ${c.de}">${esc(c.texto)}</div>`).join("");
+  $vista.innerHTML = `
+    <p class="suave">Máquina: <b>${esc(maquina()?.apodo || "sin elegir")}</b>. Respuestas cortas y paso a paso. Si es grave, le aviso al encargado.</p>
+    <div id="chat">${pintarChat()}</div>
+    <div class="chips">${sugerencias.map((s) => `<button data-sug="${esc(s)}">${esc(s)}</button>`).join("")}</div>
+    <label for="preg">Tu pregunta</label>
+    <p class="suave">¿No querés escribir? Tocá el 🎤 del teclado del celular y dictala.</p>
+    <textarea id="preg" placeholder="Ej: la sembradora deja huecos en la línea" maxlength="1000"></textarea>
+    <button class="boton primario" id="mandar" style="margin-top:10px">Preguntar</button>`;
+  const $preg = document.getElementById("preg");
+  const $chat = document.getElementById("chat");
+  $vista.querySelectorAll("[data-sug]").forEach((b) => b.addEventListener("click", () => { $preg.value = b.dataset.sug; $preg.focus(); }));
+  document.getElementById("mandar").addEventListener("click", async () => {
+    const pregunta = $preg.value.trim();
+    if (!pregunta) return;
+    const boton = document.getElementById("mandar");
+    boton.disabled = true; boton.textContent = "Pensando…";
+    estado.chat.push({ de: "yo", texto: pregunta });
+    const tipo = maquina()?.tipo;
+    let texto;
+    const datos = { uid: uid(), operario_id: estado.operarioId, maquina_id: estado.maquinaId, pregunta, fecha: ahoraISO() };
+    try {
+      if (!navigator.onLine) throw new Error("offline");
+      const r = await api("/api/consultas", { method: "POST", body: datos });
+      texto = r.respuesta + (r.escalada ? "\n\n(Le avisé al encargado.)" : "");
+    } catch (e) {
+      if (e.status && e.status < 500) { texto = e.message; }
+      else {
+        const g = buscarGuia(pregunta, tipo);
+        texto = g ? textoGuia(g) : "No tengo una guía para eso sin señal. Quedó guardada tu pregunta y se la paso al encargado cuando vuelva la señal.";
+        texto += "\n\n(Sin señal: respuesta de la guía guardada en el teléfono.)";
+        encolar("consulta", { ...datos, respuesta_offline: texto, guia_id: g ? g.id : null, escalar: !g });
+      }
+    }
+    estado.chat.push({ de: "copiloto", texto });
+    $chat.innerHTML = pintarChat();
+    $preg.value = "";
+    boton.disabled = false; boton.textContent = "Preguntar";
+    $chat.lastElementChild.scrollIntoView({ behavior: "smooth" });
+  });
+});
+
+// ---- Aprender
+ruta("aprender", "Aprender", async () => {
+  if (!operario()) return ir("#/elegir");
+  let prog = null;
+  try { prog = await api(`/api/operarios/${estado.operarioId}/progreso`); guardado.escribir("progreso." + estado.operarioId, prog); }
+  catch { prog = guardado.leer("progreso." + estado.operarioId, null); }
+  const porId = Object.fromEntries((prog?.modulos || []).map((m) => [m.id, m]));
+  $vista.innerHTML = `
+    ${prog ? `<div class="tarjeta"><b>Tu avance: ${prog.aprobados} de ${prog.total} módulos</b>
+      <div class="barra-prog"><span style="width:${prog.porcentaje}%"></span></div>
+      <p class="suave">Últimos 30 días: ${prog.jornadas_30d} checklists y ${prog.calibraciones_30d} calibraciones registradas.</p></div>` : ""}
+    <div class="grilla">${estado.conocimiento.modulos.map((m) => {
+      const p = porId[m.id];
+      const marca = p?.aprobado ? "✅" : p?.puntaje != null ? "🔁" : "📘";
+      return `<button class="boton" data-ir="#/modulo/${m.id}"><span class="ico">${marca}</span><span>${esc(m.titulo)}<small>${esc(m.resumen)}${p?.puntaje != null ? ` · ${p.puntaje}%` : ""}</small></span></button>`;
+    }).join("")}</div>`;
+});
+
+ruta("modulo", "Lección", (id) => {
+  const m = estado.conocimiento.modulos.find((x) => x.id === id);
+  if (!m) return ir("#/aprender");
+  const resp = new Array(m.preguntas.length).fill(null);
+  $vista.innerHTML = `
+    <h2>${esc(m.titulo)}</h2><p>${esc(m.resumen)}</p>
+    ${m.preguntas.map((p, i) => `<div class="item" data-preg="${i}"><div class="texto">${i + 1}. ${esc(p.p)}</div>
+      <div class="grilla">${p.opciones.map((o, j) => `<button type="button" class="boton" data-op="${j}" style="min-height:56px">${esc(o)}</button>`).join("")}</div></div>`).join("")}
+    <p id="faltan" class="aviso oculto"></p>
+    <button class="boton primario" id="corregir">Ver cómo me fue</button><div id="salida"></div>`;
+  $vista.querySelectorAll("[data-preg]").forEach((div) => div.querySelectorAll("[data-op]").forEach((b) => b.addEventListener("click", () => {
+    resp[Number(div.dataset.preg)] = Number(b.dataset.op);
+    div.querySelectorAll("[data-op]").forEach((x) => { x.style.borderColor = x === b ? "var(--primario)" : ""; x.style.borderWidth = x === b ? "3px" : ""; });
+  })));
+  document.getElementById("corregir").addEventListener("click", async () => {
+    if (resp.includes(null)) { const f = document.getElementById("faltan"); f.textContent = "Respondé todas las preguntas."; f.classList.remove("oculto"); return; }
+    const correctas = m.preguntas.filter((p, i) => p.correcta === resp[i]).length;
+    const puntaje = Math.round((correctas * 100) / m.preguntas.length);
+    await enviar("/api/progreso", "progreso", { uid: uid(), operario_id: estado.operarioId, modulo_id: m.id, respuestas: resp }).catch(() => {});
+    $vista.querySelectorAll("[data-preg]").forEach((div) => {
+      const i = Number(div.dataset.preg);
+      div.classList.add(resp[i] === m.preguntas[i].correcta ? "bien" : "mal");
+      if (resp[i] !== m.preguntas[i].correcta) div.insertAdjacentHTML("beforeend", `<p><b>Correcta:</b> ${esc(m.preguntas[i].opciones[m.preguntas[i].correcta])}</p>`);
+    });
+    document.getElementById("salida").innerHTML = `<div class="tarjeta ${puntaje >= 70 ? "ok" : "atencion"}" style="margin-top:12px">
+      <p class="resultado">${puntaje >= 70 ? "✅ Aprobado" : "🔁 Repasá y probá de nuevo"}: ${correctas} de ${m.preguntas.length}</p></div>
+      <button class="boton" data-ir="#/aprender">Volver a las lecciones</button>`;
+  });
+});
+
+// ---- Tablero del dueño
+ruta("tablero", "Tablero del equipo", async () => {
+  let t;
+  try { t = await api("/api/tablero"); guardado.escribir("tablero", t); }
+  catch { t = guardado.leer("tablero", null); }
+  if (!t) { $vista.innerHTML = `<p class="aviso">Sin señal y sin datos guardados del tablero.</p>`; return; }
+  const r = t.resumen;
+  // Las alertas menores (operarios sin checklist) se agrupan en una sola línea para no alargar el tablero.
+  const bajas = t.alertas.filter((a) => a.nivel === "baja");
+  const alertasVisibles = t.alertas.filter((a) => a.nivel !== "baja");
+  if (bajas.length) alertasVisibles.push({ nivel: "baja", texto: `${bajas.length} operario(s) sin checklist hoy`,
+    detalle: bajas.map((a) => a.texto.replace(" no hizo checklist hoy", "")).join(", ") });
+  const txtEstado = { ok: "Lista", atencion: "Atención", parada: "Parada" };
+  $vista.innerHTML = `
+    <p class="suave">${esc(t.empresa.nombre)} · actualizado ${new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" })}${navigator.onLine ? "" : " (datos guardados, sin señal)"}</p>
+    <div class="tiles">
+      <div class="tile"><div class="num" style="color:var(--ok)">${r.maquinas_ok}</div><div class="lbl">máquinas listas</div></div>
+      <div class="tile"><div class="num" style="color:var(--atencion)">${r.maquinas_atencion}</div><div class="lbl">con atención</div></div>
+      <div class="tile"><div class="num" style="color:var(--peligro)">${r.maquinas_paradas}</div><div class="lbl">paradas</div></div>
+      <div class="tile"><div class="num">${r.checklists_hoy}</div><div class="lbl">checklists hoy</div></div>
+    </div>
+    ${t.impacto ? `<div class="tarjeta ok"><b>Últimos ${t.impacto.dias} días, el Copiloto ayudó a:</b>
+      <ul style="margin:6px 0 0;padding-left:1.2rem">
+        <li><b>${t.impacto.salidas_frenadas}</b> salida(s) frenadas por un punto crítico (${t.impacto.checklists} checklists hechos)</li>
+        <li><b>${t.impacto.calibraciones_fuera_de_rango}</b> calibración(es) fuera de rango detectadas (${t.impacto.calibraciones} hechas)</li>
+        ${t.impacto.perdida_promedio_kg_ha != null ? `<li>Pérdida de cosecha medida: <b>${t.impacto.perdida_promedio_kg_ha} kg/ha</b> promedio (${t.impacto.mediciones_perdidas} mediciones)</li>` : ""}
+        <li><b>${t.impacto.consultas}</b> consultas respondidas; ${t.impacto.pedidos_ayuda} pedidos de ayuda (${t.impacto.pedidos_resueltos} resueltos)</li>
+      </ul></div>` : ""}
+    <h3>Alertas</h3>
+    <div class="tarjeta"><ul class="lista">${alertasVisibles.length ? alertasVisibles.map((a) => `
+      <li><span class="punto ${a.nivel}" aria-hidden="true"></span><div style="flex:1">
+        <div><b>${esc(a.texto)}</b></div>${a.detalle ? `<div class="suave">${esc(a.detalle)}</div>` : ""}
+        ${a.consulta_id ? `<button class="enlace" data-resolver="${a.consulta_id}">Marcar como resuelta</button>` : ""}
+      </div></li>`).join("") : "<li>Sin alertas. 👌</li>"}</ul></div>
+    <h3>Máquinas</h3>
+    <div class="tarjeta"><ul class="lista">${t.maquinas.map((m) => `
+      <li><span class="punto ${m.estado}" aria-hidden="true"></span><div style="flex:1">
+        <div><b>${esc(m.apodo)}</b> · ${esc(nombreTipo(m.tipo))} ${esc(m.marca || "")} ${m.anio ? "(" + m.anio + ")" : ""} <span class="chip ${m.estado === "parada" ? "peligro" : m.estado}">${txtEstado[m.estado]}</span></div>
+        <div class="suave">${m.ultimo_checklist ? `Último checklist: ${esc(m.ultimo_checklist.fecha.slice(0, 16).replace("T", " "))} por ${esc(m.ultimo_checklist.operario)}` : "Sin checklist registrado"} · ${Math.round(m.horas)} h</div>
+        ${m.motivos.length ? `<div class="suave">${m.motivos.map(esc).join(" · ")}</div>` : ""}
+      </div></li>`).join("")}</ul></div>
+    <h3>Operarios</h3>
+    <div class="tarjeta"><ul class="lista">${t.operarios.map((o) => `
+      <li><div style="flex:1"><div><b>${esc(o.nombre)}</b> <span class="suave">· ${esc(o.rol)}</span></div>
+        <div class="suave">Formación ${o.formacion_pct}% (${o.modulos_aprobados} módulos) · ${o.jornadas_30d} checklists y ${o.calibraciones_30d} calibraciones en 30 días</div>
+        <div class="barra-prog"><span style="width:${o.formacion_pct}%"></span></div></div></li>`).join("")}</ul></div>
+    <h3>Últimas consultas al Copiloto</h3>
+    <div class="tarjeta"><ul class="lista">${t.consultas.map((q) => `
+      <li><div style="flex:1"><div>${esc(q.pregunta)}</div>
+        <div class="suave">${esc(q.operario)} · ${esc(q.fecha.slice(0, 16).replace("T", " "))} · ${q.escalada ? (q.resuelta ? "resuelta" : "<b>pidió ayuda</b>") : "respondida"} · modo ${esc(q.modo)}</div></div></li>`).join("") || "<li>Sin consultas.</li>"}</ul></div>
+    <h3>Constancias para el productor</h3>
+    <p class="suave">Qué equipo entró a cada lote, con su checklist y calibraciones. Para mandarle al cliente.</p>
+    <div class="grilla">${(t.lotes || []).map((l) => `<button class="boton" data-ir="#/constancia/${l.id}"><span class="ico">📄</span><span>${esc(l.nombre)}<small>${esc(l.cliente)} · ${esc(l.localidad || "")}</small></span></button>`).join("")}</div>
+    <button class="boton primario" id="refrescar" style="margin-top:14px">Actualizar</button>`;
+  document.getElementById("refrescar").addEventListener("click", render);
+  $vista.querySelectorAll("[data-resolver]").forEach((b) => b.addEventListener("click", async () => {
+    try { await api(`/api/consultas/${b.dataset.resolver}/resolver`, { method: "POST", body: {} }); render(); }
+    catch (e) { b.textContent = "No se pudo (¿sin señal?)"; }
+  }));
+});
+
+ruta("constancia", "Constancia de labor", async (id) => {
+  let c;
+  try { c = await api(`/api/lotes/${Number(id)}/constancia`); }
+  catch (e) { $vista.innerHTML = `<p class="aviso">${esc(e.message || "No se pudo cargar (¿sin señal?)")}</p>`; return; }
+  const txt = { apta: "✅ Apta", con_observaciones: "⚠️ Con observaciones", no_apta: "⛔ No apta (no salió)" };
+  $vista.innerHTML = `
+    <div class="tarjeta">
+      <p class="resultado">${esc(c.lote.nombre)}</p>
+      <p>Cliente: <b>${esc(c.lote.cliente)}</b> · ${esc(c.lote.localidad || "")} · ${c.lote.hectareas || "?"} ha · ${esc(nombreCultivo(c.lote.cultivo))}</p>
+      <p class="suave">Contratista: ${esc(c.contratista)} · Emitida ${esc(c.emitida.slice(0, 16).replace("T", " "))}</p>
+    </div>
+    ${c.labores.length ? c.labores.map((l) => `
+      <div class="tarjeta ${l.checklist === "apta" ? "ok" : l.checklist === "no_apta" ? "peligro" : "atencion"}">
+        <b>${esc(l.fecha.slice(0, 16).replace("T", " "))} · ${esc(l.maquina)} (${esc(nombreTipo(l.tipo))} ${esc(l.marca || "")})</b>
+        <div>Operario: ${esc(l.operario)} · Checklist: ${txt[l.checklist]}</div>
+        ${l.observaciones ? `<div class="suave">Observaciones: ${esc(l.observaciones)}</div>` : ""}
+        ${l.calibraciones.length ? `<div>Calibraciones del equipo (últimos 3 días): ${l.calibraciones.map((k) =>
+          `${k.aprobada ? "✅" : "❌"} ${esc(k.tipo)} (${esc(k.fecha.slice(0, 10))})`).join(" · ")}</div>` : '<div class="suave">Sin calibraciones registradas en los 3 días previos.</div>'}
+      </div>`).join("") : '<p class="aviso">Todavía no hay labores registradas en este lote.</p>'}
+    ${window.COPILOTO_DEMO ? "" : '<button class="boton primario" onclick="window.print()">Imprimir o guardar como PDF</button>'}`;
+});
+
+// ---------------------------------------------------------------- arranque
+document.addEventListener("click", (e) => {
+  const destino = e.target.closest("[data-ir]");
+  if (destino) { e.preventDefault(); ir(destino.dataset.ir); }
+});
+
+(async function arrancar() {
+  pintarSenal();
+  if (!window.COPILOTO_DEMO && "serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => {});
+  await cargarBase();
+  await sincronizar();
+  render();
+  setInterval(sincronizar, 30000);
+})();
+
+</script>
+<script>
+
+(function () {
+  const demo = window.CopilotoDemo;
+  const $senal = document.getElementById("demo-senal");
+  const $reiniciar = document.getElementById("demo-reiniciar");
+  const pintar = () => {
+    $senal.setAttribute("aria-pressed", String(demo.sinSenal));
+    $senal.textContent = demo.sinSenal ? "Volver a tener señal" : "Simular que no hay señal";
+  };
+  $senal.addEventListener("click", () => { demo.simularSinSenal(!demo.sinSenal); pintar(); });
+  let confirmar = null;
+  $reiniciar.addEventListener("click", async () => {
+    if (!confirmar) {
+      $reiniciar.textContent = "¿Borrar lo que cargaste? Tocá de nuevo";
+      confirmar = setTimeout(() => { confirmar = null; $reiniciar.textContent = "Empezar de nuevo"; }, 4000);
+      return;
+    }
+    clearTimeout(confirmar); confirmar = null;
+    if (demo.sinSenal) demo.simularSinSenal(false);
+    demo.reiniciar();
+    estado.chat = []; estado.operarioId = null; estado.maquinaId = null;
+    await cargarBase();
+    pintarSenal(); pintar();
+    $reiniciar.textContent = "Listo, datos de ejemplo de nuevo";
+    setTimeout(() => { $reiniciar.textContent = "Empezar de nuevo"; }, 2500);
+    ir("#/inicio");
+  });
+  pintar();
+})();
+
+</script>

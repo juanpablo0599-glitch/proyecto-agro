@@ -170,10 +170,25 @@ function textoGuia(g) {
 const rutas = {};
 function ruta(nombre, titulo, fn) { rutas[nombre] = { titulo, fn }; }
 
-function ir(hash) { location.hash = hash; }
+// La ruta vive en memoria y se refleja en la URL cuando el navegador lo permite
+// (en algunos marcos embebidos no se puede tocar la URL; la app sigue andando igual).
+let rutaActual = location.hash || "#/inicio";
+
+function ir(hash) {
+  rutaActual = hash;
+  try { history.pushState(null, "", hash); } catch { /* marco sin acceso al historial */ }
+  render();
+}
+
+function alNavegar() {
+  const h = location.hash || "#/inicio";
+  if (h === rutaActual) return;
+  rutaActual = h;
+  render();
+}
 
 async function render() {
-  const [nombre, ...params] = (location.hash.replace(/^#\/?/, "") || "inicio").split("/");
+  const [nombre, ...params] = (rutaActual.replace(/^#\/?/, "") || "inicio").split("/");
   const r = rutas[nombre] || rutas.inicio;
   $titulo.textContent = r.titulo;
   $volver.hidden = nombre === "inicio";
@@ -188,13 +203,14 @@ async function render() {
 }
 
 $volver.addEventListener("click", () => {
-  const actual = location.hash.replace(/^#\/?/, "").split("/")[0];
+  const actual = rutaActual.replace(/^#\/?/, "").split("/")[0];
   if (actual === "tablero" || actual === "operario") ir("#/inicio");
   else if (actual === "constancia") ir("#/tablero");
   else if (estado.operarioId) ir("#/operario");
   else ir("#/inicio");
 });
-window.addEventListener("hashchange", render);
+window.addEventListener("hashchange", alNavegar);
+window.addEventListener("popstate", alNavegar);
 
 // ---------------------------------------------------------------- pantallas
 ruta("inicio", "Copiloto Rural", () => {
@@ -702,7 +718,7 @@ ruta("constancia", "Constancia de labor", async (id) => {
         ${l.calibraciones.length ? `<div>Calibraciones del equipo (últimos 3 días): ${l.calibraciones.map((k) =>
           `${k.aprobada ? "✅" : "❌"} ${esc(k.tipo)} (${esc(k.fecha.slice(0, 10))})`).join(" · ")}</div>` : '<div class="suave">Sin calibraciones registradas en los 3 días previos.</div>'}
       </div>`).join("") : '<p class="aviso">Todavía no hay labores registradas en este lote.</p>'}
-    <button class="boton primario" onclick="window.print()">Imprimir o guardar como PDF</button>`;
+    ${window.COPILOTO_DEMO ? "" : '<button class="boton primario" onclick="window.print()">Imprimir o guardar como PDF</button>'}`;
 });
 
 // ---------------------------------------------------------------- arranque
@@ -713,7 +729,7 @@ document.addEventListener("click", (e) => {
 
 (async function arrancar() {
   pintarSenal();
-  if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => {});
+  if (!window.COPILOTO_DEMO && "serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => {});
   await cargarBase();
   await sincronizar();
   render();

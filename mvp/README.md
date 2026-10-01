@@ -6,6 +6,19 @@ Copiloto de bolsillo para maquinistas y tablero para el contratista (Idea A).
 - **Dueño / encargado:** tablero con el estado de cada máquina (lista / atención / parada), alertas ordenadas por gravedad, pedidos de ayuda, checklists del día, formación y actividad de cada operario.
 - **Sin señal:** la app queda guardada en el teléfono (service worker). Checklists, calculadoras, guías y lecciones funcionan sin internet; lo que se carga queda en cola y se manda solo cuando vuelve la señal (sin duplicar).
 
+## Verlo sin instalar nada (demo en el navegador)
+
+Hay una versión de demostración publicada como página privada en claude.ai: https://claude.ai/artifact/UCnR1oToeKXnUuKYpeUynu (la puede abrir solo el dueño de la cuenta, hasta que la comparta desde el menú *Share*).
+
+Es la misma app, con un backend de demostración que corre en el navegador (`demo/backend_demo.js`) en lugar del servidor Python, y los mismos datos de ejemplo. Tiene un botón para **simular que no hay señal** y otro para **empezar de nuevo**. Para regenerarla después de cambiar la app:
+
+```bash
+cd mvp
+python3 demo/construir_demo.py   # genera demo/copiloto-demo.html
+```
+
+Si se cambia la lógica de `copiloto/servicios.py`, hay que reflejarla en `demo/backend_demo.js`.
+
 ## Cómo correrlo (un solo comando)
 
 Requisito: **Python 3.9 o más nuevo**. No hace falta instalar nada más.
