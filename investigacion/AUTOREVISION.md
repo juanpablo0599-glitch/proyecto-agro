@@ -55,3 +55,21 @@ Cierro Fase 2 con 2 vueltas.
 | Gerente de acopio | Sin objeciones nuevas. | — |
 
 Cierro Fase 3 con 2 vueltas.
+
+## Fase 4 — MVP
+
+### Vuelta 1
+| Sombrero | Debilidad más grave | Corrección |
+|---|---|---|
+| Inversor | "El tablero muestra estados pero no muestra **valor**. ¿Qué le hace pagar al contratista?" | Agregué el bloque **"Últimos 7 días, el Copiloto ayudó a…"**: salidas frenadas por un punto crítico, calibraciones fuera de rango detectadas, pérdida de cosecha medida y pedidos de ayuda resueltos. |
+| Contratista (55 años, Android gama baja, mala señal) | "El tablero es eterno en el celular, y no quiero escribir." | Agrupé las alertas menores en una sola línea. Agregué la indicación de dictar con el micrófono del teclado. Medí el peso de la app: ~60 KB sin frameworks; funciona sin señal (probado en Chromium con la red cortada: checklist y consulta quedan en cola y se sincronizan al volver la señal). |
+| Gerente de acopio / productor | "¿Cómo sé que la máquina que entró a mi campo estaba bien?" | Agregué la **constancia de labor por lote** (checklist, operario, observaciones y calibraciones del equipo de los 3 días previos), imprimible o guardable como PDF. |
+
+### Vuelta 2
+| Sombrero | Debilidad | Corrección |
+|---|---|---|
+| Inversor | "¿La IA real funciona o solo el mock?" | Probé el camino con el SDK oficial real contra una API falsa local: el pedido sale con el modelo, el system prompt, el esfuerzo bajo y el fallback. Hay tests con un cliente simulado. Sin key no se puede probar contra la API real (límite de la misión). |
+| Contratista | "Cualquiera puede elegir mi nombre y hacer el checklist por mí." | Documentado como límite: antes del piloto real hace falta un PIN por operario. |
+| Gerente de acopio | "Los datos de hoy aparecían con hora futura." | Corregido en los datos de ejemplo. |
+
+Cierro la Fase 4 con 2 vueltas.

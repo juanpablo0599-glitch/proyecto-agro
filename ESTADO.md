@@ -3,7 +3,7 @@
 **Última actualización:** 2026-10-01 04:15 UTC
 
 ## Fase actual
-Fase 4 — Construcción del MVP (arrancando)
+Fase 5 — Entregables finales (arrancando)
 
 ## Hecho
 - [x] Fase 0 — Setup.
@@ -11,8 +11,9 @@ Fase 4 — Construcción del MVP (arrancando)
 - [x] Fase 2 — Decisión: gana **Idea A** (3,50 vs 1,55). `entregables/ANALISIS_Y_DECISION.md` (incluye concepto de B).
 - [x] Fase 3 — `entregables/MODELO_DE_NEGOCIO.md` ("Copiloto Rural": precios, unit economics, GTM 90 días, roadmap, programa de capacitación).
 
+- [x] Fase 4 — MVP en `/mvp`: `cd mvp && python3 app.py`. 51 tests en verde (`python3 -m unittest discover -s tests -t .`). Flujo probado de punta a punta en Chromium (incluido sin señal). Capturas en `entregables/capturas/`.
+
 ## Sigue
-- Fase 4: MVP en `/mvp` (Python stdlib + SQLite + PWA vanilla; IA con SDK anthropic opcional / modo mock). Tests con unittest.
 - Fase 5: entregables finales (RESUMEN_EJECUTIVO, COMPETENCIA, INVESTIGACION, PITCH, PROXIMOS_PASOS, PREGUNTAS_ABIERTAS).
 
 ## Bloqueos
