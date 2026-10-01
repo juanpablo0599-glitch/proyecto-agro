@@ -23,3 +23,13 @@ Formato: fecha/hora (UTC) — decisión — alternativas — por qué.
 
 ## 2026-10-01 03:40 — B queda como documento de concepto, sin MVP
 - **Por qué:** la misión indica que si B depende de una ley incierta, se construye la ganadora y B queda como concepto. Además se dejan "señales para reabrir".
+
+## 2026-10-01 04:10 — Precio por máquina activa, en USD cobrado en pesos
+- **Decisión:** USD 25/máquina activa/mes (Plan Equipo), USD 20 (Plan Empresa, mínimo 10), 10 meses al año. Programa de formación USD 280/operario. Auditoría de labor USD 150.
+- **Alternativas:** precio por operario; precio por hectárea; suscripción fija por empresa.
+- **Por qué:** los operarios rotan (precio por operario castiga al que más rota); la máquina es estable y el contratista ya piensa sus costos por máquina. Por hectárea es más justo pero difícil de medir sin telemetría en el MVP. Se cobra en pesos al cambio del día, como hacen los contratistas con sus tarifas (FACMA las publica en USD).
+
+## 2026-10-01 04:10 — Modelo de IA para el MVP
+- **Decisión:** usar el SDK oficial `anthropic` (declarado en `requirements.txt`) con el modelo `claude-opus-5-5`, esfuerzo `low` y fallback del lado del servidor por defecto. El modelo se puede cambiar con la variable de entorno `COPILOTO_MODELO`. Si no hay `ANTHROPIC_API_KEY` o no está instalado el SDK, el MVP usa el **modo mock** (base de conocimiento local).
+- **Alternativas:** llamar a la API por HTTP directo (sin SDK); modelo más barato por defecto.
+- **Por qué:** la guía oficial recomienda el SDK y el modelo por defecto; el costo por consulta (~USD 0,025) no cambia el negocio (ver sensibilidad). El mock asegura que el MVP corra sin credenciales, como exige la misión.

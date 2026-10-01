@@ -37,3 +37,21 @@ Cierro Fase 1 con 2 vueltas: la tercera no agregaría datos nuevos verificables 
 | Gerente de acopio | Sin objeciones nuevas para A (no es su problema). | — |
 
 Cierro Fase 2 con 2 vueltas.
+
+## Fase 3 — Modelo de negocio
+
+### Vuelta 1
+| Sombrero | Debilidad más grave | Corrección |
+|---|---|---|
+| Inversor | "USD 1.150 por cliente por año es un ticket chico. Con 35 clientes apenas pagás dos sueldos mínimos. ¿Dónde está la escala?" | Agregué §4.6 "Camino para escalar": licencias para cámaras y cooperativas, Plan Empresa y ART/aseguradoras. Dejé explícito que, sin alguno de esos canales, es un negocio de autoempleo. |
+| Contratista | "¿Y si la máquina está parada? No te pago por aire. Y si el checklist le lleva 10 minutos al operario, lo saco." | Definí "máquina activa" (se cobra solo si se usó en el mes) y agregué el requisito de que el checklist dure 2 minutos o menos. |
+| Gerente de acopio / cooperativa | "Las cooperativas tenemos servicios de maquinaria y contratistas que trabajan para nuestros socios; ¿por qué no nos vendés a nosotros?" | Agregué las cooperativas y acopios con servicio de maquinaria como canal secundario. |
+
+### Vuelta 2
+| Sombrero | Debilidad | Corrección |
+|---|---|---|
+| Inversor | "El costo de la IA, ¿lo calculaste o lo inventaste?" | Calculado con el precio publicado de la API (USD 4/20 por millón de tokens para `claude-opus-5-5`) y supuestos de tokens. Sensibilidad: aunque se duplique, el margen sigue en ~73%. |
+| Contratista | "Un curso de 8 semanas en plena campaña, imposible." | El programa se dicta solo en ventanas sin campaña (julio–agosto, febrero). Ya estaba; lo dejé explícito en §8. |
+| Gerente de acopio | Sin objeciones nuevas. | — |
+
+Cierro Fase 3 con 2 vueltas.
