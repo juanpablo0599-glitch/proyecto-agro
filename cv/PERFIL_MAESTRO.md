@@ -1,100 +1,137 @@
 # Perfil maestro — Juan Pablo Cappello
 
-> **Para qué sirve:** es la memoria de este chat. Junta todo lo que hiciste y sabés, sacado de tus archivos, para armar un CV distinto para cada búsqueda. Cada CV a medida sale de acá: **nada que no esté acá (o que no me confirmes) entra a un CV.**
+> **Para qué sirve:** es la memoria de este chat. Junta todo lo que hiciste y sabés para armar un CV distinto para cada búsqueda. Cada CV a medida sale de acá: **nada que no esté acá (o que no me confirmes) entra a un CV.**
 >
-> **Fuentes revisadas (7/10/2026):** Google Drive (CV 2023, certificado de trabajo de BASF de oct-2025, nota de prórroga de oct-2025, historia académica, propuesta de Trabajo Profesional), Notion (plan de lanzamiento de Nodesophy: ICP, kit de prospección, LinkedIn) y este repo (`proyecto-agro`, Copiloto Rural).
-> **No pude leer tus chats anteriores con Claude Chat ni con Cowork:** desde esta sesión no tengo acceso al historial de conversaciones de claude.ai. Lo que hayas trabajado ahí y no esté en estos archivos lo cargamos cuando me pases el CV actual.
+> **Fuentes (actualizado 7/10/2026):** CV vigente en español ("Business Intelligence & Analytics") y en inglés ("Applied AI"), Google Drive (CV 2023, certificado de BASF, nota de prórroga, historia académica, propuesta de Trabajo Profesional), Notion (Nodesophy) y este repo (Copiloto Rural). Los chats anteriores de Claude/Cowork no son accesibles desde esta sesión.
 >
-> Leyenda: ✅ confirmado por documento · ⚠️ inferido, hay que confirmarlo · ❓ falta el dato
+> Leyenda: ✅ confirmado · ⚠️ hay que confirmarlo o los CVs no coinciden · ❓ falta el dato
 
 ---
 
 ## 1. Datos de contacto
-- Nombre: Juan Pablo Cappello ✅
-- Email: ❓ cuál usar en el CV (tenés cappello.juanp@gmail.com, jpcappello99@gmail.com, jcappello@fi.uba.ar)
-- Teléfono, LinkedIn, ciudad: ❓ (CABA ✅)
+- Juan Pablo Cappello · CABA, Buenos Aires (GMT-3) · cappello.juanp@gmail.com · el celular está en los CVs ✅
+- ❓ URL de LinkedIn
+- Criterio: **no ponemos DNI, dirección completa ni edad** (el ATS no los necesita y exponen datos sensibles). El contacto va **arriba**, debajo del nombre.
 
-## 2. Experiencia laboral
+## 2. Títulos con los que te podemos presentar (según la búsqueda)
+- Analista Sr. de Efectividad Comercial / Commercial Effectiveness · Commercial Excellence
+- Business Intelligence & Analytics / Data Analyst comercial
+- Revenue Management / Pricing Analyst
+- Sales Operations / RevOps / CRM (Salesforce) Analyst
+- Applied AI / IA aplicada a negocio / Automatización (Copilot Studio, LLM)
+- Incentivos comerciales / Compensación variable (Sales Incentive Compensation)
+- Proyectos / Transformación digital comercial
 
-### BASF Argentina S.A. — mayo 2022 a hoy
-| Etapa | Fechas | Fuente |
-|---|---|---|
-| Sales Trainee — Dispersiones y Resinas | may-2022 → jun-2023 | ✅ CV 2023 |
-| Efectivo (contrato por tiempo indeterminado) | desde 01/07/2023 | ✅ certificado |
-| **Analista Sr. de Efectividad Comercial** (área Revenue Management) | puesto a oct-2025 | ✅ certificado |
-| Ascenso después de la reestructuración del equipo | fines de 2025 | ⚠️ nota de prórroga — ❓ nombre del puesto nuevo |
+## 3. Experiencia laboral
 
-**Tareas y logros con respaldo:**
-- Sales Trainee (Dispersiones y Resinas): análisis de ventas mensuales, control y análisis de precios, relación con clientes y estudios de mercado. ✅
-- 2025: tomé las tareas de una compañera que se fue en abril y no fue reemplazada, sin dejar las mías. ✅
-- 2025: lideré un **proyecto estratégico** (dedicación de más de 11 h diarias). ✅ — ❓ qué proyecto, alcance y resultado
-- Jun-2025: hice un **relevamiento de tiempos y tareas** del equipo y lo presenté al liderazgo → derivó en la reestructuración del equipo, mi ascenso y una incorporación nueva en diciembre. ✅ *(logro fuerte para el CV: análisis de procesos que cambió la estructura del área)*
-- Según tu pitch de Nodesophy: **gestioné fuerzas de venta de campo, CRM y programas de incentivos** en una multinacional. ⚠️ — ❓ tamaño de la fuerza de venta, CRM usado (¿Salesforce?), cómo se calculaban los incentivos, impacto medido
-- Contexto: efectividad comercial **en el agro** (el pase de Dispersiones y Resinas al negocio agrícola). ⚠️ — ❓ confirmar unidad de negocio y fecha del cambio
+### BASF — Soluciones para la Agricultura LASE (Argentina, Uruguay, Paraguay, Bolivia)
+
+#### Analista Sr. de Efectividad Comercial — 07/2025 a hoy ✅
+**Datos e inteligencia comercial**
+- Responsable del modelo de información comercial regional: tableros corporativos en Power BI con semaforización e indicadores interrelacionados para 4 países. ✅
+- Conciliación entre Salesforce CRM y los tableros gerenciales: una fuente única, confiable y normalizada. ✅
+- Resolución de incidentes de datos con análisis de causa raíz e informes ejecutivos para la gerencia. ✅
+- Gestión de requerimientos del negocio: relevamiento con los referentes, análisis de factibilidad, impacto y esfuerzo, y priorización. ✅
+- Modelos de segmentación (RFM, clustering, valor contra esfuerzo) para priorizar clientes y anticipar el churn. ✅
+
+**IA y automatización**
+- **Germina:** agente de IA generativa en Microsoft Copilot Studio, con RAG sobre la base de conocimiento y fuentes citadas. Llevé el ciclo completo (prompt de sistema, diseño de la conversación, conexión a la base, branding, habilitación de usuarios). **Lo usan ~60 representantes de venta** en el campo. Roadmap: predicción de churn y memoria por usuario. ✅
+- Automatización completa del alta de clientes con flujos de IA integrados con SAP y una plataforma web externa, que reemplazó la carga manual en varios sistemas. ✅
+- Reporte gerencial generado con LLM: todos los meses un LLM lee un año de notas de visita del CRM por cliente y resume avances, pendientes y riesgos (precio, competencia, logística, cobranzas). Plantillas de prompts para M365 Copilot y un pipeline en Python (hecho con Claude Code) que convierte los datos del CRM en tableros HTML interactivos para los gerentes regionales. Prototipé con datos sintéticos para proteger la información confidencial. ✅
+- Diseño, junto con IT, de una capacitación práctica de IA para el área comercial, basada en casos de uso del día a día. ✅
+
+**Pricing e incentivos**
+- Simulador de rentabilidad y pricing para ~35 representantes: prototipo en HTML/JS (o React, ver ⚠️ más abajo) y versión productiva en Power Apps + SharePoint con seguridad por fila. Estrategia de precios por segmento. ✅
+- Gestión del **programa de incentivos de ventas de ~90 personas**: diseño de KPIs, cálculo automatizado de los pagos (Python, Excel) y análisis de causa raíz para la dirección. ✅
+
+**Gestión**
+- Jun-2025: relevamiento de tiempos y tareas del equipo presentado a la dirección → reestructuración del área, ascenso e incorporación de una persona más. Antes de eso había absorbido las tareas de una compañera que se fue y no fue reemplazada. ✅ *(no figura en tus CVs actuales: es un buen logro de liderazgo)*
+
+#### Analista de Revenue Management — 07/2023 a 06/2025 ✅
+- Lideré de punta a punta el **Modelo de Visitas** (proyecto estratégico): relevamiento de requerimientos, diseño del modelo de datos en Salesforce y despliegue con los equipos de cada país.
+- Responsable del reporte corporativo de ventas y de procesos comerciales (consignación, comisiones, evaluación de clientes nuevos, segmentación), cumpliendo los niveles de servicio acordados.
+- Cálculo y liquidación de incentivos y comisiones para Uruguay, Paraguay y Bolivia, con controles de consistencia.
+- Corresponsable de la definición de precios y la estrategia comercial por segmento.
+- Nexo entre negocio, sistemas y gerencia: traducía necesidades operativas en requerimientos y soluciones.
+
+#### Pasante de Ventas — BASF Dispersiones & Resinas Argentina — 05/2022 a 07/2023 ✅
+- Análisis de ventas presentados al senior management; control y análisis de precios.
+- Estudios de mercado para las industrias textil y de la construcción.
+- Creación y mantenimiento de apps de gestión comercial; soporte a ventas y relación con clientes.
 
 ### Nodesophy — Fundador (consultora de eficiencia comercial) — 2026 a hoy ✅
-- Consultoría para empresas B2B con fuerzas de venta de campo (15 a 150 vendedores): diagnóstico de rendimiento comercial ("medir el proceso, no solo el resultado") y automatización de tareas manuales.
-- Armé el plan de lanzamiento de 90 días: ICP, kit de prospección (LinkedIn, email, pitch, follow-up), CRM de leads en Notion con más de 10 cuentas objetivo, métricas y rituales semanales.
-- ❓ ¿Ya tuviste conversaciones o un primer cliente? ¿Lo querés en el CV o conviene ocultarlo en búsquedas corporativas?
+- Consultoría para empresas B2B con fuerza de venta de campo (15 a 150 vendedores): diagnóstico del rendimiento comercial y automatización de tareas manuales.
+- Plan de lanzamiento de 90 días: ICP, kit de prospección, CRM de leads, métricas.
+- Usar solo en búsquedas de startups, consultoras o roles de innovación. En corporativas, evaluar si conviene mostrarlo. ❓ ¿Ya tenés clientes o conversaciones?
 
-### Copiloto Rural — Cofundador (proyecto propio, agtech) — 2026 ✅ (este repo)
-- Investigación de mercado con fuentes públicas sobre dos ideas de negocio para el agro; análisis ponderado y pre-mortem para decidir entre ellas.
-- Modelo de negocio: pricing (USD 25 por máquina por mes), unit economics, punto de equilibrio, plan comercial de 90 días y roadmap.
-- MVP: app web mobile-first que funciona sin señal (PWA) para maquinistas y contratistas, con asistente de IA (Claude) y 51 tests automáticos. ⚠️ Lo construiste dirigiendo agentes de IA: en el CV conviene decir "diseñé y lideré el desarrollo de…", no "programé en Python".
+### Copiloto Rural — Cofundador (proyecto agtech) — 2026 ✅
+- Investigación de mercado, análisis de decisión, modelo de negocio (pricing, unit economics, punto de equilibrio) y un MVP: PWA que funciona sin señal, con asistente de IA (Claude) y 51 tests, desarrollada con Claude Code.
 
-### Profesor de Matemática — Instituto San Martín de Tours — mar-2021 a ago-2021 ✅
-- 1.º, 2.º y 4.º año de secundaria: preparé y di las clases, armé los exámenes y cerré las notas del cuatrimestre.
+### Profesor de Matemática — Instituto San Martín de Tours — 02/2021 a 09/2021 ✅
+- Clases de 1.º, 2.º y 4.º año de secundaria: planificación, dictado, armado de exámenes y cierre de notas. Explicar conceptos técnicos a quien no los conoce.
 
-### Colaborador — Escuela de Maestros — feb-2018 a mar-2018 ✅
-- Programa de capacitación docente. Uno de los responsables de organizarlo en la sede de la Escuela Don Bosco (Almagro).
+### Colaborador — Escuela de Maestros — 02/2018 a 03/2018 ✅
+- Organización de un programa de capacitación docente (sede Don Bosco, Almagro).
 
-## 3. Formación
-- **Ingeniería Industrial — Universidad de Buenos Aires (FIUBA)**, ingreso 2017. ✅
-  - Oct-2025: "último cuatrimestre, cursando las dos últimas materias". Sep-2026: sin inscripción a cursadas en el 2.º cuatrimestre de 2026. ❓ **¿Te recibiste? Si no, ¿qué falta (finales, Trabajo Profesional)?** Define si ponemos "Ingeniero Industrial" o "Ingeniería Industrial — último tramo".
-  - **Trabajo Profesional (propuesta 2024):** *Factibilidad de producción propia de bombas centrífugas sanitarias* para FAMIQ S.A. Estudio técnico, de mercado y económico-financiero (VAN, TIR, repago); costo propio de ~USD 1.300 contra ~USD 2.500 importado, ~140 unidades por año (~6% del mercado), inversión del primer año ~USD 193.000. ✅ ❓ ¿Cómo terminó? ¿Tenés algún vínculo con FAMIQ?
-  - Notas destacadas: Automatización Industrial y Robótica 9 · Industrias II 9 · Estadística Aplicada II 8 · Higiene y Seguridad Industrial 8. ✅
-- Bachiller — Instituto San Martín de Tours (2004-2016). Premio San Martín de Tours de Oro. ✅
+## 4. Formación
+- **Ingeniería Industrial — Universidad de Buenos Aires (FIUBA)**, 2017 a 2026. **Te faltan 2 finales; te recibirías en dic-2026.** ✅ Materias relevantes: Investigación Operativa, Teoría de Juegos, Estadística (I, II y III), Automatización Industrial y Robótica (9), Industrias II (9).
+  - Trabajo Profesional (propuesta 2024): *Factibilidad de producción propia de bombas centrífugas sanitarias* para FAMIQ S.A. (estudios técnico, de mercado y económico-financiero; VAN, TIR y repago). ❓ ¿Lo terminaste o es uno de los 2 finales pendientes?
+- Programa de Middle Management "Guiding Lights" — Instituto Madero, 2025 ✅
+- Modelado de procesos de negocio — Project Management Institute, 2025 ✅
+- Líder en Transformación Digital — LinkedIn Learning, 2024 ✅
+- CX Essentials — Forrester (vía BASF) ✅
+- SQL y Python — DataCamp; cursos de Machine Learning ✅
+- Excel y PowerPoint avanzados — certificados de la UTN; R — curso de la UBA ✅
+- Bachiller — Instituto San Martín de Tours (2004-2016), Premio San Martín de Tours de Oro ✅
 
-## 4. Habilidades (banco de palabras clave para ATS)
-**Herramientas:** SAP · Salesforce · Power BI · Excel avanzado (certificado UTN) · PowerPoint avanzado (certificado UTN) · R (curso UBA) · Notion · IA generativa / Claude (automatización, agentes) ✅ — ❓ SQL, Python, Power Query, DAX, Tableau, HubSpot, Google Sheets/Apps Script
+## 5. Habilidades (banco de palabras clave para el ATS)
+- **BI y datos:** Power BI avanzado (modelado, DAX, Power Query) · Excel avanzado · SQL intermedio · Python (pandas, openpyxl) · Salesforce CRM · SAP · Tableau (como destino de salidas) · modelado de datos · diseño de KPIs · conciliación de datos · calidad de datos · análisis de causa raíz
+- **Analítica:** segmentación (RFM, clustering) · predicción de churn · investigación operativa · estadística · análisis de pricing y rentabilidad
+- **IA y automatización:** Microsoft Copilot Studio · agentes de IA · RAG · prompt engineering · salidas estructuradas (JSON/HTML) · validación de respuestas de IA · M365 Copilot · Claude / Claude Code · ChatGPT · Power Apps · SharePoint · Power Automate ❓ · HTML/JS · React (prototipo) · Gamma · Railway · Hostinger
+- **Comercial:** efectividad comercial · revenue management · pricing por segmento · programas de incentivos y comisiones · gestión de la fuerza de ventas · modelo de visitas · alta y evaluación de clientes · consignación · estudios de mercado
+- **Gestión:** relevamiento de requerimientos · priorización (impacto/esfuerzo) · gestión de proyectos end-to-end · modelado de procesos (BPM) · gestión del cambio y adopción de usuarios · capacitación · comunicación con la dirección
+- **Contexto:** agro / protección de cultivos · industria química · 4 países (AR, UY, PY, BO)
 
-**Áreas:** Efectividad comercial (Sales Effectiveness / Commercial Excellence) · Revenue Management · Sales Operations / RevOps · Análisis de ventas y pricing · Gestión de fuerza de ventas · Administración de CRM · Esquemas de incentivos y pago variable · KPIs y tableros comerciales · Estudios de mercado · Reingeniería de procesos / estudio de tiempos · Evaluación de proyectos (VAN, TIR) · Automatización de procesos · Agro / insumos agrícolas · Industria química (dispersiones y resinas)
+## 6. Idiomas ✅
+- Español nativo · Inglés C1 (Cambridge CAE; además FCE y PET) · Portugués básico
 
-**Blandas (con evidencia):** liderazgo de equipos (voluntariados, proyecto estratégico) · hablar en público (charlas, docencia) · organización de eventos y logística · negociación (materia Conflicto y Negociación) · iniciativa emprendedora
+## 7. Voluntariado ✅ (no figura en tus CVs actuales)
+- Cenáculo (2019 a hoy): rector de retiro; lidero el equipo que lo organiza.
+- Misiones (2015-2018): coordinador de grupos en el norte argentino.
+- Pascua Joven (2017-2020): coordinador de grupos de jóvenes; di charlas.
+→ Sirve como evidencia de liderazgo y oratoria en búsquedas junior o semi-senior, o de culturas que valoran el propósito. Si falta espacio, se saca.
 
-## 5. Idiomas
-- Inglés avanzado: Cambridge **CAE**, FCE y PET. ✅
-- ❓ ¿Otros?
+## 8. Inconsistencias entre los CVs (resolver antes de usarlos)
+| Tema | CV en español | CV en inglés | Decisión |
+|---|---|---|---|
+| Nivel de Python | Básico | pandas, openpyxl, pipeline | ⚠️ Poner un nivel que puedas defender en una entrevista técnica (¿"intermedio, con asistencia de IA"?) |
+| Simulador de pricing | HTML/JS | React → Power Apps + SharePoint, ~35 representantes | ⚠️ Confirmar la versión final y su alcance |
+| Incentivos | Liquidación para UY/PY/BO (puesto anterior) | Programa de ~90 personas (puesto actual) | ✅ Son dos etapas distintas; usar las dos |
+| Pasantía | "Pasante de Ventas" | "Sales Intern" (en 2023 decía "Sales Trainee") | Usar el título oficial del contrato |
+| Docencia | 02/2021 a 09/2021 | ídem | ✅ (el CV de 2023 decía mar-ago) |
 
-## 6. Voluntariado ✅
-- **Cenáculo** (2019 a hoy): rector de retiro; lidero el equipo que lo organiza.
-- **Misiones** (2015-2018): coordinador de grupos en el norte argentino; organicé actividades para niños, jóvenes y adultos y preparé a los voluntarios.
-- **Pascua Joven** (2017-2020): coordinador de grupos de jóvenes; armé dinámicas y di charlas.
-
-## 7. Restricciones y criterios
-- Trabajás en BASF: en búsquedas activas, cuidar la confidencialidad (sin datos internos, clientes ni cifras no públicas).
-- Nodesophy y Copiloto Rural: decidir búsqueda por búsqueda si suman (startups, consultoras, roles de innovación) o si conviene bajarles el perfil (corporativo tradicional).
+## 9. Problemas ATS de los CVs actuales
+- **CV en español:** el contacto está al final (va arriba); la formación está en dos columnas (el ATS mezcla las líneas); incluye DNI, dirección y edad (sacarlos); el título "Business Intelligence & Analytics" está separado del nombre. Faltan un perfil profesional y los logros con números en el puesto anterior.
+- **CV en inglés:** está bien estructurado. Ocupa 4 páginas (conviene llevarlo a 2) y "Selected AI Projects" repite viñetas de la experiencia.
+- **En los dos:** el relevamiento de tiempos → reestructuración y los números de impacto (horas ahorradas, % de adopción, errores de liquidación evitados) no aparecen o no tienen números. ❓ ¿Tenés métricas de antes y después?
 
 ---
 
-## 8. Reglas ATS que vamos a aplicar en cada CV
-1. **Formato:** una columna, sin tablas, cuadros de texto, íconos ni gráficos. Fuente estándar (Calibri o Arial, 10-11 pt). Se entrega en .docx o en PDF con texto seleccionable.
-2. **Títulos de sección estándar:** Perfil profesional · Experiencia laboral · Formación · Habilidades · Idiomas · Voluntariado (en inglés: Summary · Experience · Education · Skills · Languages).
-3. **Palabras clave literales del aviso:** las uso tal cual aparecen ("Revenue Management", no "gestión de ingresos" si el aviso dice lo primero), en el perfil, en las viñetas y en Habilidades.
-4. **Título del perfil = título del puesto buscado.**
-5. **Viñetas con verbo de acción + qué hice + resultado (con números cuando haya).**
-6. **Fechas uniformes** (mm/aaaa) y el cargo antes que la empresa.
-7. **Largo:** 1 página, o 2 como máximo si el puesto lo justifica.
-8. **Nombre del archivo:** `CV_JuanPabloCappello_<Puesto>.pdf`.
+## 10. Reglas ATS para cada CV
+1. Una columna, sin tablas, cuadros de texto, íconos ni gráficos. Fuente Calibri o Arial de 10-11 pt. Se entrega en .docx o en PDF con texto seleccionable.
+2. Títulos de sección estándar: Perfil profesional · Experiencia laboral · Formación · Habilidades · Idiomas (en inglés: Summary · Experience · Education · Skills · Languages).
+3. Las palabras clave del aviso, **literales**, en el título, el perfil, las viñetas y las habilidades.
+4. El título debajo del nombre coincide con el del puesto buscado.
+5. Viñetas con verbo de acción + qué hice + resultado con número.
+6. Fechas en formato mm/aaaa; el cargo antes que la empresa.
+7. Contacto arriba, sin DNI, dirección ni edad.
+8. 1 página (2 como máximo para perfiles senior o de IA).
+9. Archivo: `CV_JuanPabloCappello_<Puesto>.pdf`.
 
-## 9. Cómo vamos a trabajar cada búsqueda
-1. Me pegás el aviso.
-2. Saco las palabras clave, las obligatorias y las deseables, y te muestro el nivel de match y qué brechas hay.
-3. Elijo qué experiencias y logros de este perfil destacar.
-4. Te entrego el CV adaptado con las reglas ATS y te digo qué cambié y por qué.
-5. Lo registro en el historial de abajo.
+## 11. Cómo trabajamos cada búsqueda
+1. Me pasás el aviso → 2. extraigo las palabras clave (obligatorias y deseables) y te digo el nivel de match y las brechas → 3. elijo qué mostrar de este perfil → 4. te entrego el CV (.docx/PDF) y te explico los cambios → 5. lo registro abajo.
 
-## 10. Historial de versiones por búsqueda
+## 12. Historial de versiones por búsqueda
 | Fecha | Empresa / puesto | Enfoque | Archivo |
 |---|---|---|---|
 | — | — | — | — |
